@@ -44,3 +44,6 @@ void Entry::isWireless(bool ff){
 void Entry::setExpire(int tt){
 	this->expireTime = tt;
 }
+void Entry::setValue(double vl){
+	this->value = vl;
+}

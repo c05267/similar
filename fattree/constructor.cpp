@@ -131,6 +131,6 @@ Fattree::Fattree(int k){
 	ruleReplacementEdge = 0;
 
 	// DEBUG
-	for(int i = 0; i < numberOfCore + numberOfAggregate + numberOfEdge; i++)
-		printf("TCAM[%3d] = %3d\n", i, sw[i]->TCAMSize);
+//	for(int i = 0; i < numberOfCore + numberOfAggregate + numberOfEdge; i++)
+//		printf("TCAM[%3d] = %3d\n", i, sw[i]->TCAMSize);
 }

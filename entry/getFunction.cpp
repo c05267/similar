@@ -14,6 +14,9 @@ int Entry::getPriority(void){
 int Entry::getSID(void){
 	return this->sid;
 }
+double Entry::getValue(void){
+	return value;
+}
 double Entry::getRate(void){
 	return this->rate;
 }
