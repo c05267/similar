@@ -45,7 +45,7 @@ Fattree::Fattree(int k){
 		sw[now] = new Core(now);
 		ip.setIP(10, pod, i/(pod/2)+1, i%(pod/2)+1);
 		sw[now]->setIP(ip);
-		sw[now]->TCAMSize = rand()%(MAX_TCAM_ENTRY-MIN_TCAM_ENTRY+1)+MIN_TCAM_ENTRY;
+		sw[now]->TCAMSize = 1500;
 		node[now] = sw[now];
 		now++;
 	}
@@ -55,7 +55,7 @@ Fattree::Fattree(int k){
 		sw[now] = new Aggregate(now);
 		ip.setIP(10, i/(pod/2), i%(pod/2)+(pod/2), 1);
 		sw[now]->setIP(ip);
-		sw[now]->TCAMSize = rand()%(MAX_TCAM_ENTRY-MIN_TCAM_ENTRY+1)+MIN_TCAM_ENTRY;
+		sw[now]->TCAMSize = 1500;
 		node[now] = sw[now];
 		now++;
 	}
@@ -65,7 +65,7 @@ Fattree::Fattree(int k){
 		sw[now] = new Edge(now);
 		ip.setIP(10, i/(pod/2), i%(pod/2), 1);
 		sw[now]->setIP(ip);
-		sw[now]->TCAMSize = rand()%(MAX_TCAM_ENTRY-MIN_TCAM_ENTRY+1)+MIN_TCAM_ENTRY;
+		sw[now]->TCAMSize = 1500;
 		node[now] = sw[now];
 		now++;
 	}
@@ -131,6 +131,6 @@ Fattree::Fattree(int k){
 	ruleReplacementEdge = 0;
 
 	// DEBUG
-	for(int i = 0; i < numberOfCore + numberOfAggregate + numberOfEdge; i++)
-		printf("TCAM[%3d] = %3d\n", i, sw[i]->TCAMSize);
+//	for(int i = 0; i < numberOfCore + numberOfAggregate + numberOfEdge; i++)
+//		printf("TCAM[%3d] = %3d\n", i, sw[i]->TCAMSize);
 }
