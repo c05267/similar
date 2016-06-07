@@ -32,6 +32,29 @@ LLNODE *MyLL::push_back(Entry ent){
 	push_back(ptr);
 	return ptr;
 }
+LLNODE *MyLL::pop_value(){
+	LLNODE *ptr;
+	bool test = false;
+	ptr = head;
+	while(ptr != NULL)
+	{
+		if(ptr->ent.getValue() < Long_lived_THR)
+		{
+			test = true;
+			printf("Find Short-lived Entry");
+			break;
+		}
+		else 
+			ptr = ptr->next;
+	}
+	if(test)
+		return ptr;
+	else
+	{
+		printf("No Find Short-lived Entry");
+		return head;
+	}
+}
 void MyLL::pop_front(void){
 	if(!empty()){
 		if(head->next != NULL){
