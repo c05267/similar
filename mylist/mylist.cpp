@@ -41,7 +41,7 @@ LLNODE *MyLL::pop_value(){
 		if(ptr->ent.getValue() < Long_lived_THR)
 		{
 			test = true;
-			printf("Find Short-lived Entry");
+			//printf("Find Short-lived Entry: %f \n",ptr->ent.getValue());
 			break;
 		}
 		else 
@@ -51,7 +51,8 @@ LLNODE *MyLL::pop_value(){
 		return ptr;
 	else
 	{
-		printf("No Find Short-lived Entry");
+		//printf("No Find Short-lived Entry: %f \n", head->ent.getValue());
+		//printf("No Find Short-lived Entry: %f \n", head->next->ent.getValue());
 		return head;
 	}
 }
