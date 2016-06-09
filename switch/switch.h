@@ -24,5 +24,9 @@ class Switch: public Node{
 		MyLL TCAMinactive;
 		map<Packet,LLNODE*>TCAMmapA;
 		map<Packet,LLNODE*>TCAMmapI;
+		void Add_Rule_Replacement(void);
+		int Get_Rule_Replacement(void); 		 
+	private:
+		int num_rule_replacement;
 };
 #endif

@@ -9,6 +9,7 @@
 
 // Switch class
 Switch::Switch(int id):Node(id){
+	num_rule_replacement = 0;
 }
 Event Switch::forward(double timeStamp, Packet pkt){
 
@@ -133,4 +134,14 @@ Event Switch::forward(double timeStamp, Packet pkt){
 
 	// Return event
 	return evt;
+}
+
+void Switch::Add_Rule_Replacement(void)
+{
+	num_rule_replacement++;
+}
+
+int Switch::Get_Rule_Replacement(void)
+{
+	return num_rule_replacement;
 }

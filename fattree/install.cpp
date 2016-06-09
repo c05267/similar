@@ -67,6 +67,8 @@ void Fattree::install(Event evt){
 		if(nid < numberOfCore) ruleReplacementCore ++;
 		else if(nid < numberOfCore + numberOfAggregate) ruleReplacementAggr ++;
 		else ruleReplacementEdge ++;
+		
+		sw[nid]->Add_Rule_Replacement();
 	}
 
 	// Install at the tail

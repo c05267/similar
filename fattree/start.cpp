@@ -29,6 +29,7 @@ void Fattree::start(void){
 	int nowFlowID;
 	arrive = 0;
 	totFlow = ((int)eventQueue.size()) - 1;
+	//int total = 0;
 
 	// Event queue
 	while(!eventQueue.empty()){
@@ -180,7 +181,12 @@ void Fattree::start(void){
 					printf("Avg. flow completion time: %.3lf\n", metric_avgFlowCompleteTime/totFlow);
 					printf("Wireless:Wired = %d:%d\n", numberOfWirelessFlow, numberOfWiredFlow);
 					printf("Replacement %d / %d / %d\n", ruleReplacementCore, ruleReplacementAggr, ruleReplacementEdge);
-/*
+					/*for(int i=0; i<numberOfCore+numberOfAggregate+numberOfEdge; i++)
+					{
+						total = total + sw[i]->Get_Rule_Replacement();
+					}
+					printf("Total: %d \n", total);*/
+/*				
 					printf("%d %d %.3lf %d %d %d %d %d\n", metric_flowSetupRequest, metric_ruleInstallCount,
 							metric_avgFlowCompleteTime/totFlow, numberOfWirelessFlow, numberOfWiredFlow,
 							ruleReplacementCore, ruleReplacementAggr, ruleReplacementEdge);
