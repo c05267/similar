@@ -13,6 +13,7 @@ class MyLL{
 		LLNODE *push_back(Entry);
 		void pop_front(void);
 		void remove(LLNODE *);
+		LLNODE *pop_value();
 		Entry front(void);
 		Entry back(void);
 		int size(void);

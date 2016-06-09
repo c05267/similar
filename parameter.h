@@ -23,4 +23,5 @@
 #define THR_WIRED 0.0
 #define THR_WIRELESS 0.0
 #define THR_TCAM_FULL 1.0
+#define Long_lived_THR 0.5
 #endif

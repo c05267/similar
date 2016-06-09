@@ -11,7 +11,7 @@ class Entry{
 		Entry(int s0 = -1, int s1 = -1, int s2 = -1, int s3 = -1,
 			int d0 = -1, int d1 = -1, int d2 = -1, int d3 = -1, 
 			int out = 0, int pri = 0, unsigned int sp = -1,
-			unsigned int dp = -1, unsigned int pro = -1);
+			unsigned int dp = -1, unsigned int pro = -1, double vl = -1);
 
 		// Set function
 		void setSrcMask(int,int,int,int);
@@ -24,12 +24,14 @@ class Entry{
 		void setSID(int);
 		void setRate(double);
 		void setExpire(int);
+		void setValue(double);
 
 		// Get function
 		int getOutputPort(void);
 		int getPriority(void);
 		int getSID(void) const;
 		double getRate(void);
+		double getValue(void);
 		Packet getSample(void);
 		bool isMatch(Packet);
 		void isWireless(bool);
@@ -47,5 +49,6 @@ class Entry{
 		double rate;
 		bool wireless;
 		int expireTime;
+		double value;
 };
 #endif

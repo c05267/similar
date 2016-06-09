@@ -56,6 +56,7 @@ bool Fattree::wireless(int nid, Packet pkt, vector<Entry>& vent, int timeStamp){
 	ent.setDstPort(pkt.getDstPort());
 	ent.setProtocol(pkt.getProtocol());
 	ent.setExpire(timeStamp + ENTRY_EXPIRE_TIME);
+	ent.setValue(pkt.getFlowSize()/(pkt.getDataRate()*1000000));
 	vent.clear();
 	for(int i = 0; i < wlPath[ss][tt].size()-1; i++){
 		nowID = wlPath[ss][tt][i];

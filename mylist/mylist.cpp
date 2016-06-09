@@ -61,6 +61,32 @@ Entry MyLL::front(void){
 	fprintf(stderr, "Error: linked list is empty!!\n");
 	return 0;
 }
+LLNODE *MyLL::pop_value(){
+	LLNODE *ptr;
+	bool test = false;
+	ptr = head;
+	while(ptr != NULL)
+	{
+		if(ptr->ent.getValue() < Long_lived_THR)
+		{
+			test = true;
+			//printf("Find Short-lived Entry: %f \n",ptr->ent.getValue());
+			break;
+		}
+		else 
+			ptr = ptr->next;
+	}
+	if(test)
+		return ptr;
+	else
+	{
+		//printf("No Find Short-lived Entry: %f \n", head->ent.getValue());
+		//printf("No Find Short-lived Entry: %f \n", head->next->ent.getValue());
+		return head;
+	}
+	return tail;
+
+}
 Entry MyLL::back(void){
 	if(!empty()) return tail->ent;
 	fprintf(stderr, "Error: linked list is empty!!\n");

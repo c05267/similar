@@ -17,6 +17,9 @@ int Entry::getSID(void) const{
 double Entry::getRate(void){
 	return this->rate;
 }
+double Entry::getValue(void){
+	return value;
+}
 bool Entry::isWireless(void){
 	return this->wireless;
 }

@@ -21,6 +21,7 @@ void Fattree::install(Event evt){
 	Packet pkt = evt.getPacket();
 	Packet tmpPkt;
 	Event ret;
+	LLNODE *ptr;
 
 	// Remove the expired entries
 	updateTCAM(nid, ts);
@@ -49,9 +50,17 @@ void Fattree::install(Event evt){
 
 		// Active TCAM
 		else {
-			tmpPkt = sw[nid]->TCAMactive.front().getSample();
+			ptr = sw[nid]->TCAMactive.pop_value();
+			tmpPkt = ptr->ent.getSample();
+			if(sw[nid]->TCAMmapA.count(tmpPkt) == 0){
+				printf("ggggxxxxxx \n");
+			}
 			sw[nid]->TCAMmapA.erase(tmpPkt);
-			sw[nid]->TCAMactive.pop_front();
+
+			sw[nid]->TCAMactive.remove(ptr);
+			/*tmpPkt = sw[nid]->TCAMactive.front().getSample();
+			sw[nid]->TCAMmapA.erase(tmpPkt);
+			sw[nid]->TCAMactive.pop_front();*/
 		}
 
 		// Count

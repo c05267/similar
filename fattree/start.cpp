@@ -133,6 +133,7 @@ void Fattree::start(void){
 
 				// Check the queue of corresponding switch
 				sid = evt.getID();
+				sw[sid]->isSetup[evt.getPacket()] = false;
 				ts = evt.getTimeStamp();
 				for(int i = 0; i < sw[sid]->que.size(); i++){
 
