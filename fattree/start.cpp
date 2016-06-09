@@ -21,6 +21,7 @@ void Fattree::start(void){
 	PrevHop ph;
 	map<int,PrevHop>::iterator itr;
 	pair<Event,Event>pr;
+	Packet tmp2;
 
 	int prevPerCent = -1, perCent;
 	arrive = 0;
@@ -113,6 +114,7 @@ void Fattree::start(void){
 
 				// Check the queue of corresponding switch
 				sid = evt.getID();
+				sw[sid]->isSetup[evt.getPacket()] = false;
 				ts = evt.getTimeStamp();
 				for(int i = 0; i < sw[sid]->que.size(); i++){
 
@@ -146,7 +148,29 @@ void Fattree::start(void){
 				if(perCent != prevPerCent){
 					printf("%3d%% (%d/%d) done.\n", perCent, arrive, totFlow);
 					prevPerCent = perCent;
+					
+					
 				}
+				
+				// DEBUG: check if there is any switch having queue size > 0
+				/*if(arrive == 30){
+					int totalQUE = 0;
+					bool flagDD = false;
+					for(int debug = 0; debug < numberOfCore+numberOfAggregate+numberOfEdge; debug++){
+						if(sw[debug]->que.size() > 0){
+							printf("QQ switch ID = %d, size = %d\n", debug, sw[debug]->que.size());
+							totalQUE += sw[debug]->que.size();
+							flagDD = true;
+						}
+					}
+					if(!flagDD) printf("DDDDDDDDONE\n");
+					{
+						tmp2 = sw[14]->que[0];
+						printf("Total = %d %d %d\n", totalQUE, tmp2.getSrcPort(), tmp2.getDstPort());
+					}
+				}*/
+				/*if(arrive > 30)
+					printf("GGGGGGGGGGG\n");*/
 	
 				// Flow arrival time
 				metric_avgFlowCompleteTime += (evt.getTimeStamp() - metric_flowArrivalTime[evt.getPacket().getSequence()]);
