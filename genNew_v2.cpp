@@ -26,8 +26,8 @@ vector<int>flowArrv;
 // Flow data rate (Mbps/sec)
 double rateMBPS[] = {0.001, 0.01, 0.1, 1, 10, 100};
 int ratePERC[] = {10, 30, 20, 20, 15, 5};
-double durationSecond[] = {0.01,0.1,1,5,10,50,100};
-int durationPERC[] = {50, 2, 12, 14, 4, 8, 10};
+double durationSecond[] = {0.1, 1, 5, 10, 50, 100};
+int durationPERC[] = {52, 12, 14, 4, 8, 10};
 vector<double>flowRate;
 
 // Flow size
