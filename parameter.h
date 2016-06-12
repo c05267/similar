@@ -19,5 +19,5 @@
 #define MIN_TCAM_ENTRY 500
 #define MAX_TCAM_ENTRY 2500
 #define ENTRY_EXPIRE_TIME 1e7
-#define Long_lived_THR 0.5
+#define Long_lived_THR 10.0
 #endif
