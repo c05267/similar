@@ -44,8 +44,11 @@ LLNODE *MyLL::pop_value(){
 			//printf("Find Short-lived Entry: %f \n",ptr->ent.getValue());
 			break;
 		}
-		else 
+		else
+		{	
+			printf("Find long-lived Entry: %f \n",ptr->ent.getValue());		
 			ptr = ptr->next;
+		}
 	}
 	if(test)
 		return ptr;
@@ -55,6 +58,8 @@ LLNODE *MyLL::pop_value(){
 		//printf("No Find Short-lived Entry: %f \n", head->next->ent.getValue());
 		return head;
 	}
+	return tail;
+
 }
 void MyLL::pop_front(void){
 	if(!empty()){
@@ -71,8 +76,13 @@ void MyLL::pop_front(void){
 	}
 }
 void MyLL::remove(LLNODE *ptr){
-	if(head == ptr) head = head->next;
-	if(tail == ptr) tail = tail->prev;
+	if(head == ptr)	head = head->next;
+	if(tail == ptr) 
+	{
+		if(tail->next != NULL)
+			printf("next of tail is not NULL \n");
+		tail = tail->prev;
+	}
 	if(ptr->prev != NULL)
 		ptr->prev->next = ptr->next;
 	if(ptr->next != NULL)
