@@ -131,7 +131,7 @@ bool Fattree::wired(int nid, Packet pkt, vector<Entry>& vent, int timeStamp){
 		ent.setValue(pkt.getFlowSize()/(pkt.getDataRate()*1000000));
 		
 //		printf("FlowSize = %d %e \n", pkt.getFlowSize(), pkt.getDataRate());
-		printf("FieldValue = %e \n", ent.getValue());
+		//printf("FieldValue = %e \n", ent.getValue());
 		
 		for(int i = revSeq.size()-1; i > 0; i--){
 			for(port = 0; port < node[revSeq[i]]->link.size(); port++)
