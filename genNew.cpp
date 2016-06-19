@@ -36,7 +36,7 @@ int sizePERC[] = {10, 14, 19, 12, 10, 14, 8, 5, 3, 2, 2, 1};
 vector<int>flowSize;
 
 // Ratio of flow: ToR, Pod, Core
-int ratio[3] = {2, 3, 5};
+int ratio[3] = {0, 0, 10};
 
 // Read input
 void readInput(int& k, double& usec, double& scale){
