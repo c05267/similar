@@ -24,8 +24,9 @@ int arrvPERC[] = {8, 7, 4, 6, 4, 2, 10, 8, 10, 14, 8, 8, 8, 3};
 vector<int>flowArrv;
 
 // Flow data rate (Mbps/sec)
-double rateMBPS[] = {0.001, 0.01, 0.1, 0.5, 1, 5, 10, 100};
-int ratePERC[] = {10, 30, 25, 17, 5, 4, 5, 4};
+double rateMBPS[] = {0.0005, 0.001, 0.005, 0.01, 0.05, 0.1, 0.5,
+	1, 5, 10, 50, 100};
+int ratePERC[] = {6, 7, 14, 16, 13, 9, 7, 10, 5, 4, 5, 4};
 double durationSecond[] = {0.1, 1, 5, 10, 50, 75, 100};
 int durationPERC[] = {52, 12, 14, 4, 8, 7, 3};
 vector<double>flowRate;
