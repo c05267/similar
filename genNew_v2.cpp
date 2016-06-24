@@ -29,8 +29,10 @@ vector<int>flowArrv;
 int ratePERC[] = {6, 7, 14, 16, 13, 9, 7, 10, 5, 4, 5, 4};*/
 double rateMBPS[] = {0.001, 0.01, 0.1, 0.5, 1, 10, 100};
 int ratePERC[] = {10, 30, 20, 10, 10, 15, 5};
-double durationSecond[] = {0.1, 1, 5, 10, 50, 75, 100};
-int durationPERC[] = {52, 12, 14, 4, 8, 7, 3};
+//double durationSecond[] = {1, 5, 10, 50, 75, 100, 105, 110};
+//int durationPERC[] = {52, 8, 4, 6, 10, 5, 5, 10};
+double durationSecond[] = {0.1, 1, 5, 10, 50, 75, 100, 105, 110};
+int durationPERC[] = {37, 15, 8, 4, 6, 10, 5, 5, 10};
 vector<double>flowRate;
 
 // Flow size
@@ -174,7 +176,7 @@ void gen(int k, double usec, double scale){
 		ftmp.arrivalTime = curTime;
 		itmp = rand()%(flowRate.size());
 		itmp2 = rand()%(flowDurnation.size());
-		if(flowDurnation[ itmp2 ] > 5 && flowRate[ itmp ] > 1)
+		if(flowDurnation[ itmp2 ] > 1 && flowRate[ itmp ] > 0.5)
 		{
 			while(true)
 			{
