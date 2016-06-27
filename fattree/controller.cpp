@@ -10,6 +10,7 @@
 #include "../event/event.h"
 #include "../event/eventType.h"
 
+
 // Controller
 void Fattree::controller(Event ctrEvt){
 
@@ -17,7 +18,7 @@ void Fattree::controller(Event ctrEvt){
 	int nid;
 	int pathLen;
 	int nowFlowID;
-	int temp;
+	double temp;
 	double delay;
 	double flowSetupDelay = FLOW_SETUP_DELAY;
 	double computePathDelay = CONTROL_PATH_DELAY;
@@ -50,7 +51,7 @@ void Fattree::controller(Event ctrEvt){
 			else if(rcdFlowID[pkt]){
 				nowFlowID = rcdFlowID[pkt];
 				vent.clear();
-
+				//printf("packet seq: %d\n", pkt.getSequence());
 				// Rule needed
 				if(rule(nid, allEntry[nowFlowID], ent)){
 					ent.setExpire(ctrEvt.getTimeStamp() + flowSetupDelay + ENTRY_EXPIRE_TIME);
@@ -99,6 +100,9 @@ void Fattree::controller(Event ctrEvt){
 		temp = ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay;
 		if(wired(nid, pkt, vent, temp)){
 
+			// Reserve capacity
+			modifyCap(vent, -pkt.getDataRate());
+			
 			// Install rule
 			for(int i = 0; i < vent.size(); i++){
 

@@ -15,7 +15,7 @@
 void Fattree::install(Event evt){
 
 	// Variables
-	int ts = evt.getTimeStamp();
+	double ts = evt.getTimeStamp();
 	int nid = evt.getID();
 	Entry ent = evt.getEntry();
 	Packet pkt = evt.getPacket();
@@ -28,6 +28,7 @@ void Fattree::install(Event evt){
 
 	// Remove the entries of the same flow ID (active)
 	if(sw[nid]->TCAMmapA.count(pkt) > 0){
+		printf("temp \n");
 		sw[nid]->TCAMactive.remove( sw[nid]->TCAMmapA[pkt] );
 		sw[nid]->TCAMmapA.erase(pkt);
 	}
@@ -36,6 +37,7 @@ void Fattree::install(Event evt){
 	if(sw[nid]->TCAMmapI.count(pkt) > 0){
 		sw[nid]->TCAMinactive.remove( sw[nid]->TCAMmapI[pkt] );
 		sw[nid]->TCAMmapI.erase(pkt);
+		printf("temp2 \n");
 	}
 
 	// If TCAM is full
@@ -51,9 +53,18 @@ void Fattree::install(Event evt){
 		// Active TCAM
 		else {
 			ptr = sw[nid]->TCAMactive.pop_value();
+			
 			tmpPkt = ptr->ent.getSample();
+			if(sw[nid]->TCAMmapA.count(tmpPkt) == 0){
+				printf("ggggxxxxxx \n");
+			}
 			sw[nid]->TCAMmapA.erase(tmpPkt);
+
 			sw[nid]->TCAMactive.remove(ptr);
+			
+			//tmpPkt = sw[nid]->TCAMactive.front().getSample();
+			//sw[nid]->TCAMmapA.erase(tmpPkt);
+			//sw[nid]->TCAMactive.pop_front();
 		}
 
 		// Count

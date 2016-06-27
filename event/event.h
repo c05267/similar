@@ -23,6 +23,8 @@ class Event{
 	private:
 		int eventType;
 		double timeStamp;
+		bool firstPacket;
+		bool lastPacket;
 		int id;
 		Packet packet;
 		Entry ent;

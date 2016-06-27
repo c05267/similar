@@ -18,3 +18,4 @@ Packet Event::getPacket(void){
 Entry Event::getEntry(void){
 	return this->ent;
 }
+

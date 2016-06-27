@@ -21,6 +21,9 @@ Event Switch::forward(double timeStamp, Packet pkt){
 	Event evt;
 	IP dstIP;
 	IP selfIP;
+	int lastPktSize;
+	int nowFlowID;
+	
 
 	// Arrival of destination
 	arrive = true;
@@ -36,6 +39,7 @@ Event Switch::forward(double timeStamp, Packet pkt){
 		evt.setTimeStamp(timeStamp);
 		evt.setEventType(EVENT_DONE);
 		evt.setPacket(pkt);
+		printf("switch done %d\n", this->getID());
 		return evt;
 	}
 
@@ -43,6 +47,7 @@ Event Switch::forward(double timeStamp, Packet pkt){
 	while(!TCAMactive.empty()){
 		if(TCAMactive.front().isExpired(timeStamp)){
 			tmpPkt = TCAMactive.front().getSample();
+			printf("Source Port: %d \n", tmpPkt.getSrcPort());
 			TCAMmapA.erase(tmpPkt);
 			TCAMactive.pop_front();
 		}
@@ -53,6 +58,7 @@ Event Switch::forward(double timeStamp, Packet pkt){
 			tmpPkt = TCAMinactive.front().getSample();
 			TCAMmapI.erase(tmpPkt);
 			TCAMinactive.pop_front();
+			//printf("ssssssssss \n");
 		}
 		else break;
 	}
@@ -63,7 +69,6 @@ Event Switch::forward(double timeStamp, Packet pkt){
 	if(TCAMmapA.count(pkt) > 0){
 		result = TCAMmapA[pkt]->ent;
 		pri = 0;
-
 		// Update entry expire time & Install at the tail (LRU)
 		result.setExpire(timeStamp + ENTRY_EXPIRE_TIME);
 		TCAMactive.remove(TCAMmapA[pkt]);
@@ -72,7 +77,6 @@ Event Switch::forward(double timeStamp, Packet pkt){
 	else if(TCAMmapI.count(pkt) > 0){
 		result = TCAMmapI[pkt]->ent;
 		pri = 0;
-
 		// Remove from inactive
 		TCAMinactive.remove(TCAMmapI[pkt]);
 		TCAMmapI.erase(pkt);
@@ -84,13 +88,13 @@ Event Switch::forward(double timeStamp, Packet pkt){
 
 	// Entry not found
 	if(pri == -1){
-
+		
 		// Check if this flow already requesting flow setup
 		if(isSetup[pkt]){
 
 			// Push into queue
 			que.push_back(pkt);
-
+			
 			// No OP
 			evt.setTimeStamp(timeStamp);
 			evt.setEventType(EVENT_NOP);
@@ -108,6 +112,7 @@ Event Switch::forward(double timeStamp, Packet pkt){
 			evt.setEventType(EVENT_FLOWSETUP);
 			evt.setPacket(pkt);
 			evt.setID(this->getID());
+		
 			return evt;
 		}
 	}
@@ -120,7 +125,16 @@ Event Switch::forward(double timeStamp, Packet pkt){
 	timeStamp = timeStamp + TCAMDelay;
 
 	// Forward event
-	forwardDelay = pkt.getFlowSize() / pkt.getDataRate();
+	/*if(pkt.getLastPacket())
+	{
+		lastPktSize = (pkt.getFlowSize() % PKT_SIZE) ? (pkt.getFlowSize() % PKT_SIZE) : PKT_SIZE;
+		forwardDelay = lastPktSize / pkt.getDataRate();
+	}
+	else */
+	if(PKT_SIZE > pkt.getFlowSize())
+		forwardDelay = pkt.getFlowSize() / pkt.getDataRate();
+	else
+		forwardDelay = PKT_SIZE / pkt.getDataRate();
 	evt.setTimeStamp(timeStamp + forwardDelay);
 	evt.setEventType(EVENT_FORWARD);
 	evt.setPacket(pkt);

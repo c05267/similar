@@ -36,6 +36,7 @@ class Fattree{
 		int numberOfEdge;				// Number of edge switches
 		int numberOfHost;				// Number of hosts
 		int flowIDCount;				// Current flow ID count
+		int totFlow;
 		double compAvail;				// Controller available time (not used)
 		Node **node;					// All nodes
 		Switch **sw;					// All switches
@@ -58,13 +59,14 @@ class Fattree{
 		bool wireless(int,Packet,vector<Entry>&,int);	// Wireless policy
 		double vecdot(double[],double[],double[],double[]);	// Calculate vector dot
 		double vecdis(double[],double[],double[],double[]);	// Calculate vector distance
-		void updateTCAM(int,int);		// Remove expired entries
+		void updateTCAM(int,double);		// Remove expired entries
 		void recrdPrev(Event,Event);	// Record previous hop information
 		void modCap(int,int,double);	// Release capacity of previous hop
 		bool blockFlow(Event,Event);	// Check if capacity is enough or not
 		void resumeFlow(int,int);		// Resume blocked flow
 		void begTransmission(double,Packet);	// Called when transmission starts
 		void endTransmission(double,Packet);	// Called when transmission finishes
+		void modifyCap(vector<Entry>&, double);	// Modify capacity of wired path
 
 		// Metric
 		int metric_flowSetupRequest;

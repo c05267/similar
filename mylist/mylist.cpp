@@ -46,7 +46,7 @@ LLNODE *MyLL::pop_value(){
 		}
 		else
 		{	
-			printf("Find long-lived Entry: %f \n",ptr->ent.getValue());		
+			//printf("Find long-lived Entry: %f \n",ptr->ent.getValue());		
 			ptr = ptr->next;
 		}
 	}

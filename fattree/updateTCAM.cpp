@@ -3,7 +3,7 @@
 #include "../basic_lib.h"
 
 // Remove expired entries
-void Fattree::updateTCAM(int nid, int timeStamp){
+void Fattree::updateTCAM(int nid, double timeStamp){
 
 	Packet tmpPkt;
 
@@ -13,6 +13,7 @@ void Fattree::updateTCAM(int nid, int timeStamp){
 			tmpPkt = sw[nid]->TCAMactive.front().getSample();
 			sw[nid]->TCAMmapA.erase(tmpPkt);
 			sw[nid]->TCAMactive.pop_front();
+			printf("KKKKKKK \n");
 		}
 		else break;
 	}
@@ -23,6 +24,7 @@ void Fattree::updateTCAM(int nid, int timeStamp){
 			tmpPkt = sw[nid]->TCAMinactive.front().getSample();
 			sw[nid]->TCAMmapI.erase(tmpPkt);
 			sw[nid]->TCAMinactive.pop_front();
+			printf("KKKKKKK \n");
 		}
 		else break;
 	}

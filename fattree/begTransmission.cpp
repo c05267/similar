@@ -26,11 +26,13 @@ void Fattree::begTransmission(double timeStamp, Packet pkt){
 				// Move from inactive to active
 				ent = allEntry[nowFlowID][i];
 				nid = ent.getSID();
+				printf("BegStart: %d\n", nid);
 
 				// Remove from inactive
 				if(sw[nid]->TCAMmapI.count(pkt) > 0){
 					sw[nid]->TCAMinactive.remove(sw[nid]->TCAMmapI[pkt]);
 					sw[nid]->TCAMmapI.erase(pkt);
+					printf("I to A\n");
 
 					// Update timestamp &  Install at the tail (LRU)
 					ent.setExpire(timeStamp + ENTRY_EXPIRE_TIME);
@@ -38,6 +40,7 @@ void Fattree::begTransmission(double timeStamp, Packet pkt){
 				}
 			}
 		}
+		
 	}
 
 	// Update count of alive flows

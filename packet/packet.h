@@ -10,7 +10,7 @@ class Packet{
 		// Constructor
 		Packet(void);
 		Packet(IP, IP, unsigned int, unsigned int, unsigned int);
-		
+
 		// Set function
 		void setSrcIP(IP);
 		void setDstIP(IP);
@@ -20,6 +20,8 @@ class Packet{
 		void setSequence(int);
 		void setFlowSize(unsigned int);
 		void setDataRate(double);
+		void setFirstPacket(bool);
+		void setLastPacket(bool);
 
 		// Get function
 		IP getSrcIP(void);
@@ -30,6 +32,8 @@ class Packet{
 		int getSequence(void);
 		unsigned int getFlowSize(void);
 		double getDataRate(void);
+		bool getFirstPacket(void);
+		bool getLastPacket(void);
 
 		// Comparator function
 		bool operator<(const Packet&)const;
@@ -45,5 +49,7 @@ class Packet{
 		// Flow info
 		unsigned int flowSize;
 		double dataRate;
+		bool firstPacket;
+		bool lastPacket;
 };
 #endif

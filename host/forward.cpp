@@ -14,6 +14,7 @@ Event Host::forward(double timeStamp, Packet pkt){
 	double forwardDelay;
 	IP selfIP, dstIP;
 	Event evt;
+	int lastPktSize;
 
 	// Arrival of destination
 	arrive = true;
@@ -29,12 +30,23 @@ Event Host::forward(double timeStamp, Packet pkt){
 		evt.setTimeStamp(timeStamp);
 		evt.setEventType(EVENT_DONE);
 		evt.setPacket(pkt);
-//printf("[%6.1lf] Flow %d arrives at destination.\n", timeStamp, pkt.getSequence());
+		/*if(pkt.getLastPacket())
+		printf("[%6.1lf] Flow %d arrives at destination.\n", timeStamp, pkt.getSequence());*/
 		return evt;
 	}
 	
 	// Forward to switch
-	forwardDelay = pkt.getFlowSize() / pkt.getDataRate();
+	//forwardDelay = pkt.getFlowSize() / pkt.getDataRate();
+	/*if(pkt.getLastPacket())
+	{
+		lastPktSize = (pkt.getFlowSize() % PKT_SIZE) ? (pkt.getFlowSize() % PKT_SIZE) : PKT_SIZE;
+		forwardDelay = lastPktSize / pkt.getDataRate();
+	}
+	else */
+	if(PKT_SIZE > pkt.getFlowSize())
+		forwardDelay = pkt.getFlowSize() / pkt.getDataRate();
+	else
+		forwardDelay = PKT_SIZE / pkt.getDataRate();
 	evt.setTimeStamp(timeStamp + forwardDelay);
 	evt.setEventType(EVENT_FORWARD);
 	evt.setID(link[0].id);

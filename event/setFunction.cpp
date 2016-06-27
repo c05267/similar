@@ -18,3 +18,4 @@ void Event::setPacket(Packet pp){
 void Event::setEntry(Entry ent){
 	this->ent = ent;
 }
+
