@@ -184,6 +184,9 @@ void gen(int k, double usec, double scale){
 				if(flowRate[ itmp ] <= 1)
 					break;
 			}
+			/* One-one mapping */
+			ftmp.dataRate = flowRate[ itmp ];
+			ftmp.flowSize = int(flowRate[ itmp ]*flowDurnation[ itmp2 ]*1000000);
 		}
 		else if(flowRate[ itmp ] > 1 && flowDurnation[ itmp2 ] > 0.1)
 		{
@@ -193,13 +196,22 @@ void gen(int k, double usec, double scale){
 				if(flowDurnation[ itmp2 ] < 1)
 					break;
 			}
+			/* One-one mapping */
+			ftmp.dataRate = flowRate[ itmp ];
+			ftmp.flowSize = int(flowRate[ itmp ]*flowDurnation[ itmp2 ]*1000000);
 		}
-
-		/* One-one mapping */
-		ftmp.dataRate = flowRate[ itmp ];
-		ftmp.flowSize = int(flowRate[ itmp ]*flowDurnation[ itmp2 ]*1000000);
-		
-
+		else if(flowRate[ itmp ] > 1)
+		{
+			/* One-one mapping */
+			ftmp.dataRate = flowRate[ itmp ];
+			ftmp.flowSize = int(flowRate[ itmp ]*0.01*1000000);
+		}
+		else
+		{
+			/* One-one mapping */
+			ftmp.dataRate = flowRate[ itmp ];
+			ftmp.flowSize = int(flowRate[ itmp ]*flowDurnation[ itmp2 ]*1000000);
+		}
 
 	
 		
