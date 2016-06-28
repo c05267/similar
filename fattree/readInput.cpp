@@ -88,4 +88,5 @@ void Fattree::readInput(void){
 		// Record flow arrival time
 		metric_flowArrivalTime[seq-1] = timeStamp;
 	}
+
 }
