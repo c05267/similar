@@ -17,7 +17,7 @@ void Fattree::start(void){
 	// Until all event finished
 	int sid, arrive;
 	double ts;
-	Event evt, next;
+	Event evt, next, next2;
 	PrevHop ph;
 	map<int,PrevHop>::iterator itr;
 	pair<Event,Event>pr;
@@ -27,6 +27,9 @@ void Fattree::start(void){
 	int count = 0;
 	int prevPerCent = -1, perCent;
 	arrive = 0;
+	int hostID;
+	IP srcIP;
+	
 	//totFlow = ((int)eventQueue.size()) - 1;
 	while(!eventQueue.empty()){
 
@@ -68,9 +71,50 @@ void Fattree::start(void){
 					printf("Time: %f , Flow ID: %d, Protocol: %d \n", evt.getTimeStamp(), pkt.getSequence(), pkt.getProtocol());
 				}*/
 
+				pkt = evt.getPacket();
+
+				if(pkt.getIsDivided() == false && numOfPackets[pkt] > 0)
+				{
+					/*printf("start: Number of remaining packets: %d \n", numOfPackets[pkt]);
+					printf("Hello world \n");*/
+					pkt.setIsDivided(true);
+					
+					srcIP = pkt.getSrcIP();
+					tmp2.setSrcIP(pkt.getSrcIP());
+					tmp2.setDstIP(pkt.getDstIP());
+					tmp2.setSrcPort(pkt.getSrcPort());
+					tmp2.setDstPort(pkt.getDstPort());
+					tmp2.setProtocol(pkt.getProtocol());
+					tmp2.setSequence(pkt.getSequence());
+					tmp2.setFlowSize(pkt.getFlowSize());
+					tmp2.setDataRate(pkt.getDataRate());
+					tmp2.setFirstPacket(false);
+					tmp2.setIsDivided(false);
+					
+					//last packet
+					if(numOfPackets[pkt] == 1)
+						tmp2.setLastPacket(true);
+					else
+						tmp2.setLastPacket(false);
+					
+					
+					// Put into event queue
+					next2.setTimeStamp(evt.getTimeStamp() + PKT_SIZE/pkt.getDataRate());
+					next2.setEventType(EVENT_FORWARD);
+					next2.setPacket(tmp2);
+					//Delivery to first switch
+					hostID = numberOfCore + numberOfAggregate + numberOfEdge + 
+					srcIP.byte[1]*pod*pod/4 + srcIP.byte[2]*pod/2 + srcIP.byte[3]-2;
+					next2.setID(node[hostID]->link[0].id);
+					eventQueue.push(next2);
+					
+					numOfPackets[pkt]--;
+					
+				}
 				// Try to forward
 				next = node[evt.getID()]->forward(evt.getTimeStamp(), evt.getPacket());
 				pkt = next.getPacket();
+				
 				// Forward event
 				if(next.getEventType() == EVENT_FORWARD){
 

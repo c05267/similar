@@ -46,6 +46,7 @@ class Fattree{
 		vector<Event>cumQue;			// Cumulated event queue
 		map<int,PrevHop>prevHop;		// Previous hop
 		map<Packet,int>aliveFlow;		// Number of alive flow currently in the network
+		map<Packet,int>numOfPackets;	// Number of remaining packets for each flow 
 
 		// Private method
 		void controller(Event);			// Handles a batch of flow setup requests

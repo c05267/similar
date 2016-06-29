@@ -33,3 +33,6 @@ bool Packet::getFirstPacket(void){
 bool Packet::getLastPacket(void){
 	return this->lastPacket;
 }
+bool Packet::getIsDivided(void){
+	return this->Divided;
+}

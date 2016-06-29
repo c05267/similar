@@ -37,56 +37,51 @@ void Fattree::readInput(void){
 		else
 			numberOfPacket =  ceil((double)flowSize/(double)PKT_SIZE);
 		
-		lastPktSize = (flowSize % PKT_SIZE) ? (flowSize % PKT_SIZE) : PKT_SIZE;
 		totFlow++;
 		
 		//printf("numberOfPacket: %d, Flow ID %d \n", numberOfPacket, seq );
 		
 		// Setup Packet Info
-		for(int i=0; i<numberOfPacket; i++)
-		{
-			srcIP.setIP(charSrcIP);
-			dstIP.setIP(charDstIP);
-			pkt.setSrcIP(srcIP);
-			pkt.setDstIP(dstIP);
-			pkt.setSrcPort(srcPort);
-			pkt.setDstPort(dstPort);
-			pkt.setProtocol(protocol);
-			pkt.setSequence(seq);
-			pkt.setFlowSize(flowSize);
-			pkt.setDataRate(dataRate);
-			// Put into event queue
-			if(i==0)
-			{
-				evt.setTimeStamp(timeStamp);
-				pkt.setFirstPacket(true);
-				//printf("Flow ID: %d, timestamp: %f, protocol: %d \n", pkt.getSequence(), timeStamp, protocol);
-			}
-			else 
-			{
-				evt.setTimeStamp(timeStamp + i*(PKT_SIZE/dataRate));
-				pkt.setFirstPacket(false);
-			}
 
-			//last packet
-			if(i == numberOfPacket-1)
-				pkt.setLastPacket(true);
-			else
-				pkt.setLastPacket(false);
-			
-
-			evt.setEventType(EVENT_FORWARD);
-			evt.setPacket(pkt);
-			hostID = numberOfCore + numberOfAggregate + numberOfEdge + 
-						srcIP.byte[1]*pod*pod/4 + srcIP.byte[2]*pod/2 + srcIP.byte[3]-2;
-			evt.setID(node[hostID]->link[0].id);
-			eventQueue.push(evt);
-		}
+		srcIP.setIP(charSrcIP);
+		dstIP.setIP(charDstIP);
+		pkt.setSrcIP(srcIP);
+		pkt.setDstIP(dstIP);
+		pkt.setSrcPort(srcPort);
+		pkt.setDstPort(dstPort);
+		pkt.setProtocol(protocol);
+		pkt.setSequence(seq);
+		pkt.setFlowSize(flowSize);
+		pkt.setDataRate(dataRate);
+		
+		//add packet attribution
+		pkt.setFirstPacket(true);
+		pkt.setIsDivided(false);
+		
+		//printf("Flow ID: %d, timestamp: %f, protocol: %d \n", pkt.getSequence(), timeStamp, protocol);
+		
+		//last packet
+		if(flowSize <= PKT_SIZE)
+			pkt.setLastPacket(true);
+		else
+			pkt.setLastPacket(false);
+		
+		// Put into event queue
+		evt.setTimeStamp(timeStamp);
+		evt.setEventType(EVENT_FORWARD);
+		evt.setPacket(pkt);
+		//Delivery to first switch
+		hostID = numberOfCore + numberOfAggregate + numberOfEdge + 
+		srcIP.byte[1]*pod*pod/4 + srcIP.byte[2]*pod/2 + srcIP.byte[3]-2;
+		evt.setID(node[hostID]->link[0].id);
+		eventQueue.push(evt);
 		seq++;
-
 
 		// Record flow arrival time
 		metric_flowArrivalTime[seq-1] = timeStamp;
+		
+		numOfPackets[pkt] = numberOfPacket - 1;
+		//printf("Number of remaining packets: %d \n", numOfPackets[pkt]);
 	}
-
+	//printf("Hello\n");
 }

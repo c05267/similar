@@ -33,3 +33,6 @@ void Packet::setFirstPacket(bool tag){
 void Packet::setLastPacket(bool tag){
 	this->lastPacket = tag;
 }
+void Packet::setIsDivided(bool di){
+	this->Divided = di;
+}
