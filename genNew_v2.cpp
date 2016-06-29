@@ -176,35 +176,24 @@ void gen(int k, double usec, double scale){
 		ftmp.arrivalTime = curTime;
 		itmp = rand()%(flowRate.size());
 		itmp2 = rand()%(flowDurnation.size());
-		if(flowDurnation[ itmp2 ] > 1 && flowRate[ itmp ] > 0.1)
-		{
-			while(true)
-			{
-				itmp = rand()%(flowRate.size());
-				if(flowRate[ itmp ] <= 1)
-					break;
-			}
-			/* One-one mapping */
-			ftmp.dataRate = flowRate[ itmp ];
-			ftmp.flowSize = int(flowRate[ itmp ]*flowDurnation[ itmp2 ]*1000000);
-		}
-		else if(flowRate[ itmp ] > 1 && flowDurnation[ itmp2 ] > 0.1)
-		{
-			while(true)
-			{
-				itmp2 = rand()%(flowDurnation.size());
-				if(flowDurnation[ itmp2 ] < 1)
-					break;
-			}
-			/* One-one mapping */
-			ftmp.dataRate = flowRate[ itmp ];
-			ftmp.flowSize = int(flowRate[ itmp ]*flowDurnation[ itmp2 ]*1000000);
-		}
-		else if(flowRate[ itmp ] > 1)
+		if(flowRate[ itmp ] > 1)
 		{
 			/* One-one mapping */
 			ftmp.dataRate = flowRate[ itmp ];
 			ftmp.flowSize = int(flowRate[ itmp ]*0.01*1000000);
+			
+		}
+		else if(flowDurnation[ itmp2 ] > 5)
+		{
+			/*while(true)
+			{
+				itmp = rand()%(flowRate.size());
+				if(flowRate[ itmp ] <= 1)
+					break;
+			}*/
+			/* One-one mapping */
+			ftmp.dataRate = 0.01/8;
+			ftmp.flowSize = int(0.01/8*flowDurnation[ itmp2 ]*1000000);
 		}
 		else
 		{
