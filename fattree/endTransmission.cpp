@@ -14,10 +14,10 @@ void Fattree::endTransmission(double timeStamp, Packet pkt){
 	Entry ent;
 
 	// Update count of alive flows
-	aliveFlow[pkt] --;
+	//aliveFlow[pkt] --;
 
 	// All such flows are done
-	if(aliveFlow[pkt] == 0){
+	//if(aliveFlow[pkt] == 0){
 
 		// All switches along the path
 		nowFlowID = rcdFlowID[pkt];
@@ -31,11 +31,12 @@ void Fattree::endTransmission(double timeStamp, Packet pkt){
 			if(sw[nid]->TCAMmapA.count(pkt) > 0){
 				sw[nid]->TCAMactive.remove(sw[nid]->TCAMmapA[pkt]);
 				sw[nid]->TCAMmapA.erase(pkt);
+				//printf("flow id: %d, switch id: %d \n", pkt.getSequence(), nid);
 
 				// Install at the tail (LRU)
 				/*if(sw[nid]->TCAMmapI.count(pkt) == 0)
 					sw[nid]->TCAMmapI[pkt] = sw[nid]->TCAMinactive.push_back(ent);*/
 			}
 		}
-	}
+	//}
 }
