@@ -36,6 +36,7 @@ class Fattree{
 		int numberOfEdge;				// Number of edge switches
 		int numberOfHost;				// Number of hosts
 		int maxEntry;					// Maximum number of TCAM entries
+		int totFlow;					// number of flows
 		int flowIDCount;				// Current flow ID count
 		double compAvail;				// Controller available time (not used)
 		Node **node;					// All nodes
@@ -46,6 +47,7 @@ class Fattree{
 		vector<Event>cumQue;			// Cumulated event queue
 		map<int,PrevHop>prevHop;		// Previous hop
 		map<Packet,int>aliveFlow;		// Number of alive flow currently in the network
+		map<Packet,int>numOfPackets;	// Number of remaining packets for each flow
 
 		// Private method
 		void controller(Event);			// Handles a batch of flow setup requests
@@ -55,11 +57,11 @@ class Fattree{
 		void wirelessSP(void);			// Pre-process wireless shortest path
 		bool rule(int,vector<Entry>,Entry&);	// Extract rule from flow path
 		int pathInit(Packet,map<int,int>&);		// Initialize the prev array with -1
-		bool wired(int,Packet,vector<Entry>&,int);		// Wired policy
-		bool wireless(int,Packet,vector<Entry>&,int);	// Wireless policy
+		bool wired(int,Packet,vector<Entry>&,double);		// Wired policy
+		bool wireless(int,Packet,vector<Entry>&,double);	// Wireless policy
 		double vecdot(double[],double[],double[],double[]);	// Calculate vector dot
 		double vecdis(double[],double[],double[],double[]);	// Calculate vector distance
-		void updateTCAM(int,int);		// Remove expired entries
+		void updateTCAM(int,double);		// Remove expired entries
 		void recrdPrev(Event,Event);	// Record previous hop information
 		void modCap(int,int,double);	// Release capacity of previous hop
 		bool blockFlow(Event,Event);	// Check if capacity is enough or not
@@ -69,6 +71,7 @@ class Fattree{
 		void begTransmission(double,Packet);	// Called when transmission starts
 		void endTransmission(double,Packet);	// Called when transmission finishes
 		bool isTCAMfull(const vector<Entry>& nodes, bool isWired);	// Test if TCAM is "Full"
+		void modifyCap(vector<Entry>&, double, bool);	// Modify capacity of wired/wireless path
 
 		// Metric
 		int metric_flowSetupRequest;

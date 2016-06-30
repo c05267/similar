@@ -46,6 +46,7 @@ Fattree::Fattree(int k){
 	totalNode = numberOfCore + numberOfAggregate + numberOfEdge + numberOfHost;
 	node = new Node*[totalNode];
 	sw = new Switch*[totalNode - numberOfHost];
+	totFlow = 0; 
 
 	// All path flow entry reset
 	flowIDCount = 1;

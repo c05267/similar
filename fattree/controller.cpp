@@ -18,7 +18,7 @@ void Fattree::controller(Event ctrEvt){
 	int nid;
 	int pathLen;
 	int nowFlowID;
-	int temp;
+	double temp;
 	double delay;
 	double flowSetupDelay = FLOW_SETUP_DELAY;
 	double computePathDelay = CONTROL_PATH_DELAY;
@@ -111,7 +111,10 @@ void Fattree::controller(Event ctrEvt){
 			// You MUST use wired :)
 			temp = ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay;
 			if(wired(nid, pkt, vent, temp)){
-
+				
+				// Reserve capacity
+				modifyCap(vent, -pkt.getDataRate(), false);
+				
 				// Install rule
 				for(int i = 0; i < vent.size(); i++){
 
@@ -159,7 +162,10 @@ void Fattree::controller(Event ctrEvt){
 
 						// Wired TCAM
 						if(!isTCAMfull(vent, true)){
-
+							
+							// Reserve capacity
+							modifyCap(vent, -pkt.getDataRate(), false);
+							
 							// Install wired rule
 							for(int i = 0; i < vent.size(); i++){
 
@@ -177,6 +183,9 @@ void Fattree::controller(Event ctrEvt){
 						}
 					}
 				}
+				
+				// Reserve capacity
+				modifyCap(copyVENT, -pkt.getDataRate(), true);
 
 				// Install wireless rule
 				for(int i = 0; i < copyVENT.size(); i++){
@@ -195,7 +204,10 @@ void Fattree::controller(Event ctrEvt){
 
 			// Wired CAP
 			else if(wired(nid, pkt, vent, temp)){
-
+				
+				// Reserve capacity
+				modifyCap(vent, -pkt.getDataRate(), false);
+				
 				// Install wired rule
 				for(int i = 0; i < vent.size(); i++){
 
@@ -226,7 +238,10 @@ void Fattree::controller(Event ctrEvt){
 		
 			// Wired CAP
 			if(wired(nid, pkt, vent, temp)){
-
+				
+				// Reserve capacity
+				modifyCap(vent, -pkt.getDataRate(), false);
+				
 				// Copy for later use
 				copyVENT = vent;
 

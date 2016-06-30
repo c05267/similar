@@ -6,7 +6,7 @@
 #include "../IP/IP.h"
 
 // Wireless policy
-bool Fattree::wireless(int nid, Packet pkt, vector<Entry>& vent, int timeStamp){
+bool Fattree::wireless(int nid, Packet pkt, vector<Entry>& vent, double timeStamp){
 
 	// IP
 	IP srcIP = pkt.getSrcIP();

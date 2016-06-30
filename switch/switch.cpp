@@ -119,12 +119,21 @@ Event Switch::forward(double timeStamp, Packet pkt){
 	// Foward after link available
 	outputPort = result.getOutputPort();
 	timeStamp = timeStamp + TCAMDelay;
-
+	
 	// Forward event
-	forwardDelay = pkt.getFlowSize() / pkt.getDataRate();
+	if(PKT_SIZE > pkt.getFlowSize())
+		forwardDelay = pkt.getFlowSize() / pkt.getDataRate();
+	else
+		forwardDelay = PKT_SIZE / pkt.getDataRate();
 	evt.setTimeStamp(timeStamp + forwardDelay);
 	evt.setEventType(EVENT_FORWARD);
-	evt.setPacket(pkt);
+	evt.setPacket(pkt);	
+	
+	// Forward event
+	/*forwardDelay = pkt.getFlowSize() / pkt.getDataRate();
+	evt.setTimeStamp(timeStamp + forwardDelay);
+	evt.setEventType(EVENT_FORWARD);
+	evt.setPacket(pkt);*/
 
 	// Wired/Wireless
 	if(result.isWireless())
