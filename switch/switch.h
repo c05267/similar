@@ -21,9 +21,9 @@ class Switch: public Node{
 		vector< vector<int> >iList;
 		double APrate;
 		MyLL TCAMactive;
-		MyLL TCAMinactive;
+		//MyLL TCAMinactive;
 		map<Packet,LLNODE*>TCAMmapA;
-		map<Packet,LLNODE*>TCAMmapI;
+		//map<Packet,LLNODE*>TCAMmapI;
 		void Add_Rule_Replacement(void);
 		int Get_Rule_Replacement(void); 		 
 	private:
