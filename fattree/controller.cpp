@@ -30,6 +30,7 @@ void Fattree::controller(Event ctrEvt){
 	vector<Entry>copyVENT;
 	bool hasHandle = false;
 	int k;
+	int wired_replacement, wireless_replacement;
 
 	// Classify events
 	for(int i = 0; i < cumQue.size(); i++){
@@ -97,7 +98,11 @@ void Fattree::controller(Event ctrEvt){
 		evt = flowSetupEvent[j];
 		nid = evt.getID();
 		pkt = evt.getPacket();
-	
+		
+		//counting number of rule replacements on the wired/wireless routing path
+		wired_replacement = 0;
+		wireless_replacement = 0;
+		
 		// Assign flow ID
 		nowFlowID = flowIDCount ++;
 		rcdFlowID[pkt] = nowFlowID;
@@ -159,10 +164,47 @@ void Fattree::controller(Event ctrEvt){
 
 					// Wired CAP
 					if(wired(nid, pkt, vent, temp)){
+					
+						//calculate wireless rule replacements
+						for(int i = 0; i < copyVENT.size(); i++)
+						{
+							wireless_replacement += sw[copyVENT[i].getSID()]->Get_Rule_Replacement();
+							//printf("Wireless Switch: %d \n", sw[copyVENT[i].getSID()]->Get_Rule_Replacement());
+						}
+						
+						//calculate wired rule replacements
+						for(int i = 0; i < vent.size(); i++)
+						{
+							wired_replacement += sw[vent[i].getSID()]->Get_Rule_Replacement();
+							//printf("Wired Switch: %d \n", sw[vent[i].getSID()]->Get_Rule_Replacement());
+						}
+						
+						//printf("Wired Rep: %d, Wireless Rep: %d \n", wired_replacement, wireless_replacement);
 
 						// Wired TCAM
 						if(!isTCAMfull(vent, true)){
+							//printf("tempxxxx \n");
+							// Reserve capacity
+							modifyCap(vent, -pkt.getDataRate(), false);
 							
+							// Install wired rule
+							for(int i = 0; i < vent.size(); i++){
+
+								// Switch side event
+								ret.setEventType(EVENT_INSTALL);
+								ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
+								ret.setID(vent[i].getSID());
+								ret.setPacket(pkt);
+								ret.setEntry(vent[i]);
+								eventQueue.push(ret);
+							}
+							// Record inserted entries
+							allEntry.push_back(vent);
+							continue;
+						}
+						else if(wired_replacement < wireless_replacement)
+						{
+							printf("temp \n");
 							// Reserve capacity
 							modifyCap(vent, -pkt.getDataRate(), false);
 							
