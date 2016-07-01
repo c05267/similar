@@ -67,7 +67,7 @@ LLNODE *MyLL::pop_value(){
 	ptr = head;
 	while(ptr != NULL)
 	{
-		if(ptr->ent.getValue() < Long_lived_THR)
+		if(ptr->ent.getValue() > Long_lived_THR)
 		{
 			test = true;
 			//printf("Find Short-lived Entry: %f \n",ptr->ent.getValue());
