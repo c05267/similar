@@ -47,3 +47,6 @@ void Entry::setExpire(int tt){
 void Entry::setValue(double vl){
 	this->value = vl;
 }
+void Entry::setRecovery(bool re){
+	this->recovery = re;
+}

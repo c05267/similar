@@ -25,6 +25,7 @@ class Entry{
 		void setRate(double);
 		void setExpire(int);
 		void setValue(double);
+		void setRecovery(bool);
 
 		// Get function
 		int getOutputPort(void);
@@ -37,6 +38,7 @@ class Entry{
 		void isWireless(bool);
 		bool isWireless(void);
 		bool isExpired(int);
+		bool getRecovery(void);
 	private:
 		int sid;
 		int srcMask[4];
@@ -50,5 +52,6 @@ class Entry{
 		bool wireless;
 		int expireTime;
 		double value;
+		bool recovery; 
 };
 #endif

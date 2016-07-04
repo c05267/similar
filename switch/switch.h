@@ -19,6 +19,7 @@ class Switch: public Node{
 		double posXY[2];
 		vector<EDGE>wlink;
 		vector< vector<int> >iList;
+		vector<Entry> cache;
 		double APrate;
 		MyLL TCAMactive;
 		//MyLL TCAMinactive;

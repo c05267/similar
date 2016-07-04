@@ -18,6 +18,7 @@ void Fattree::install(Event evt){
 	double ts = evt.getTimeStamp();
 	int nid = evt.getID();
 	Entry ent = evt.getEntry();
+	Entry tmpEnt;
 	Packet pkt = evt.getPacket();
 	Packet tmpPkt;
 	Event ret;
@@ -50,13 +51,22 @@ void Fattree::install(Event evt){
 
 		// Active TCAM
 
-		ptr = sw[nid]->TCAMactive.pop_value();
+		/*ptr = sw[nid]->TCAMactive.pop_value();
 		tmpPkt = ptr->ent.getSample();
 		sw[nid]->TCAMmapA.erase(tmpPkt);
-		sw[nid]->TCAMactive.remove(ptr);
-		/*tmpPkt = sw[nid]->TCAMactive.front().getSample();
+		sw[nid]->TCAMactive.remove(ptr);*/
+		
+		if(sw[nid]->TCAMactive.front().getValue() <= ent.getValue())
+		{
+			tmpEnt = sw[nid]->TCAMactive.front();
+			ent.setRecovery(true);
+			sw[nid]->cache.push_back(tmpEnt);
+			printf("find a larger entry value \n");
+		}
+		
+		tmpPkt = sw[nid]->TCAMactive.front().getSample();
 		sw[nid]->TCAMmapA.erase(tmpPkt);
-		sw[nid]->TCAMactive.pop_front();*/
+		sw[nid]->TCAMactive.pop_front();
 		
 
 		// Count

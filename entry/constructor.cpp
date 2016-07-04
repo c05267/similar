@@ -24,4 +24,5 @@ Entry::Entry(int s0, int s1, int s2, int s3,
 	priority = pri;
 	wireless = false;
 	value = vl;
+	recovery = false;
 }

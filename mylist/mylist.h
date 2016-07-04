@@ -11,7 +11,9 @@ class MyLL{
 		MyLL(void);
 		bool empty(void);
 		LLNODE *push_back(Entry);
+		LLNODE *push_front(Entry);
 		void pop_front(void);
+		void pop_back(void);
 		void remove(LLNODE *);
 		LLNODE *pop_value();
 		Entry front(void);
@@ -22,5 +24,6 @@ class MyLL{
 		LLNODE *head;
 		LLNODE *tail;
 		void push_back(LLNODE *);
+		void push_front(LLNODE *);
 };
 #endif

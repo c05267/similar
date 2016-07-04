@@ -25,11 +25,32 @@ void MyLL::push_back(LLNODE *ptr){
 	}
 	numberOfElement ++;
 }
+void MyLL::push_front(LLNODE *ptr){
+	if(head == NULL){
+		ptr->prev = ptr->next = NULL;
+		head = ptr;
+		tail = ptr;
+	}
+	else{
+		ptr->next = head;
+		ptr->next->prev = ptr;
+		ptr->prev = NULL;
+		head = ptr;
+	}
+	numberOfElement ++;
+}
 LLNODE *MyLL::push_back(Entry ent){
 	LLNODE *ptr;
 	ptr = (LLNODE *)malloc(sizeof(LLNODE));
 	ptr->ent = ent;
 	push_back(ptr);
+	return ptr;
+}
+LLNODE *MyLL::push_front(Entry ent){
+	LLNODE *ptr;
+	ptr = (LLNODE *)malloc(sizeof(LLNODE));
+	ptr->ent = ent;
+	push_front(ptr);
 	return ptr;
 }
 void MyLL::pop_front(void){
@@ -41,6 +62,20 @@ void MyLL::pop_front(void){
 		}
 		else{
 			free(head);
+			head = tail = NULL;
+		}
+		numberOfElement --;
+	}
+}
+void MyLL::pop_back(void){
+	if(!empty()){
+		if(tail->prev != NULL){
+			tail = tail->prev;
+			free(tail->next);
+			tail->next = NULL;
+		}
+		else{
+			free(tail);
 			head = tail = NULL;
 		}
 		numberOfElement --;

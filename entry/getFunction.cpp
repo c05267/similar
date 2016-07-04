@@ -26,6 +26,9 @@ bool Entry::isWireless(void){
 bool Entry::isExpired(int curTime){
 	return this->expireTime <= curTime;
 }
+bool Entry::getRecovery(void){
+	return this->recovery;
+}
 Packet Entry::getSample(void){
 	IP srcIP(srcMask[0], srcMask[1], srcMask[2], srcMask[3]);
 	IP dstIP(dstMask[0], dstMask[1], dstMask[2], dstMask[3]);

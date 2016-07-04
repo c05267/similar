@@ -129,6 +129,25 @@ Event Switch::forward(double timeStamp, Packet pkt){
 	evt.setEventType(EVENT_FORWARD);
 	evt.setPacket(pkt);	
 	
+	//delete tail entry, and install the entry from cache
+	if(result.getRecovery() && cache.size() > 0)
+	{
+		tmpPkt = this->TCAMactive.back().getSample();
+		this->TCAMmapA.erase(tmpPkt);
+		this->TCAMactive.pop_back();
+		printf("find a recovery entry \n");
+		
+		tmpPkt = cache[cache.size()-1].getSample();
+		//if no the entry in the TCAM entry, no flow setup from controller
+		if(this->TCAMmapA.count(tmpPkt) <=0)
+		{
+			TCAMmapA[tmpPkt] = TCAMactive.push_front(cache[cache.size()-1]);
+			cache.pop_back();
+			printf("replacement done \n");
+		}
+		
+	}
+	
 	// Forward event
 	/*forwardDelay = pkt.getFlowSize() / pkt.getDataRate();
 	evt.setTimeStamp(timeStamp + forwardDelay);
