@@ -46,7 +46,7 @@ Fattree::Fattree(int k){
 		sw[now] = new Core(now);
 		ip.setIP(10, pod, i/(pod/2)+1, i%(pod/2)+1);
 		sw[now]->setIP(ip);
-		sw[now]->TCAMSize = 1000;
+		sw[now]->TCAMSize = 1500;
 		node[now] = sw[now];
 		now++;
 	}
@@ -56,7 +56,7 @@ Fattree::Fattree(int k){
 		sw[now] = new Aggregate(now);
 		ip.setIP(10, i/(pod/2), i%(pod/2)+(pod/2), 1);
 		sw[now]->setIP(ip);
-		sw[now]->TCAMSize = 1000;
+		sw[now]->TCAMSize = 1500;
 		node[now] = sw[now];
 		now++;
 	}
@@ -66,7 +66,7 @@ Fattree::Fattree(int k){
 		sw[now] = new Edge(now);
 		ip.setIP(10, i/(pod/2), i%(pod/2), 1);
 		sw[now]->setIP(ip);
-		sw[now]->TCAMSize = 1000;
+		sw[now]->TCAMSize = 1500;
 		node[now] = sw[now];
 		now++;
 	}
@@ -118,10 +118,10 @@ Fattree::Fattree(int k){
 		}
 
 	// Controller interval timeout event
-	Event evt;
+	/*Event evt;
 	evt.setEventType(EVENT_INTERVAL);
 	evt.setTimeStamp(CONTROL_BATCH);
-	eventQueue.push(evt);
+	eventQueue.push(evt);*/
 
 	// Metric
 	metric_flowSetupRequest = 0;
