@@ -75,6 +75,7 @@ void Fattree::start(void){
 					/*printf("start: Number of remaining packets: %d \n", numOfPackets[pkt]);
 					printf("Hello world \n");*/
 					pkt.setIsDivided(true);
+					evt.setPacket(pkt);
 					
 					srcIP = pkt.getSrcIP();
 					tmp2.setSrcIP(pkt.getSrcIP());
