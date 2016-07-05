@@ -32,6 +32,7 @@ void Fattree::start(void){
 	int hostID;
 	IP srcIP;
 	vector<Entry>vent;
+	int packet_interval = 0;
 	//int total = 0;
 
 	// Event queue
@@ -75,6 +76,7 @@ void Fattree::start(void){
 					/*printf("start: Number of remaining packets: %d \n", numOfPackets[pkt]);
 					printf("Hello world \n");*/
 					pkt.setIsDivided(true);
+					evt.setPacket(pkt);
 					
 					srcIP = pkt.getSrcIP();
 					tmp2.setSrcIP(pkt.getSrcIP());
@@ -162,19 +164,20 @@ void Fattree::start(void){
 			case EVENT_FLOWSETUP:
 //printf("[%6.1lf] Flow setup request: %d at %d.\n", evt.getTimeStamp(), evt.getPacket().getSequence(), evt.getID());
 				cumulate(evt);
+				controller(evt);
 				metric_flowSetupRequest ++;
 				break;
 
 			// Interval timeout: handle batch of flow setup requests
-			case EVENT_INTERVAL:
-				controller(evt);
-				break;
+			//case EVENT_INTERVAL:
+				//break;
 
 			// Install & forward
 			case EVENT_INSTALL:
 //printf("[%6.1lf] Install: %d at %d\n", evt.getTimeStamp(), evt.getPacket().getSequence(), evt.getID());
 				install(evt);
 				metric_ruleInstallCount ++;
+				packet_interval = 0;
 
 				// Check the queue of corresponding switch
 				sid = evt.getID();
