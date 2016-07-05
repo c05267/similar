@@ -29,6 +29,15 @@ bool Entry::isExpired(int curTime){
 bool Entry::getRecovery(void){
 	return this->recovery;
 }
+int Entry::getProtocol(void){
+	return protocol;
+}
+int Entry::getSrcPort(void){
+	return srcPort;
+}
+int Entry::getDstPort(void){
+	return dstPort;
+}
 Packet Entry::getSample(void){
 	IP srcIP(srcMask[0], srcMask[1], srcMask[2], srcMask[3]);
 	IP dstIP(dstMask[0], dstMask[1], dstMask[2], dstMask[3]);

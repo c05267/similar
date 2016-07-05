@@ -130,6 +130,8 @@ bool Fattree::wired(int nid, Packet pkt, vector<Entry>& vent, double timeStamp){
 			ent.setValue(PKT_SIZE/(pkt.getDataRate()*1000000));
 		else
 			ent.setValue(pkt.getFlowSize()/(pkt.getDataRate()*1000000));
+			
+		//printf("Wired Policy Entry Value: %f \n", ent.getValue());
 		for(int i = revSeq.size()-1; i > 0; i--){
 			for(port = 0; port < node[revSeq[i]]->link.size(); port++)
 				if(node[revSeq[i]]->link[port].id == revSeq[i-1]) break;

@@ -11,7 +11,7 @@ void Fattree::endTransmission(double timeStamp, Packet pkt){
 	// Variables
 	int nowFlowID;
 	int nid;
-	Entry ent;
+	Entry ent, tmpent;
 
 	// Update count of alive flows
 	//aliveFlow[pkt] --;
@@ -21,6 +21,7 @@ void Fattree::endTransmission(double timeStamp, Packet pkt){
 
 		// All switches along the path
 		nowFlowID = rcdFlowID[pkt];
+		printf("End Transmission: %d, %d \n", pkt.getSrcPort(), pkt.getDstPort());
 		for(int i = 0; i < allEntry[nowFlowID].size(); i++){
 
 			// Move from active to inactive
@@ -36,6 +37,16 @@ void Fattree::endTransmission(double timeStamp, Packet pkt){
 				// Install at the tail (LRU)
 				/*if(sw[nid]->TCAMmapI.count(pkt) == 0)
 					sw[nid]->TCAMmapI[pkt] = sw[nid]->TCAMinactive.push_back(ent);*/
+			}
+			
+			for(int i=0; i< sw[nid]->cache.size(); i++)
+			{
+				tmpent = sw[nid]->cache[i];
+				if(tmpent.getSrcPort() == ent.getSrcPort() && tmpent.getDstPort() == ent.getDstPort())
+				{
+					sw[nid]->cache.erase(sw[nid]->cache.begin() + i);
+					//printf("We remove a leaved flow entry from the cache \n");
+				}
 			}
 		}
 	//}

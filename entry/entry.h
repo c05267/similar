@@ -39,6 +39,9 @@ class Entry{
 		bool isWireless(void);
 		bool isExpired(int);
 		bool getRecovery(void);
+		int getProtocol(void);
+		int getSrcPort(void);
+		int getDstPort(void);
 	private:
 		int sid;
 		int srcMask[4];

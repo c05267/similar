@@ -61,6 +61,7 @@ bool Fattree::wireless(int nid, Packet pkt, vector<Entry>& vent, double timeStam
 		ent.setValue(PKT_SIZE/(pkt.getDataRate()*1000000));
 	else
 		ent.setValue(pkt.getFlowSize()/(pkt.getDataRate()*1000000));
+	//printf("Wireless Policy Entry Value: %f \n", ent.getValue());
 	vent.clear();
 	for(int i = 0; i < wlPath[ss][tt].size()-1; i++){
 		nowID = wlPath[ss][tt][i];

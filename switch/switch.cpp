@@ -69,6 +69,8 @@ Event Switch::forward(double timeStamp, Packet pkt){
 		result.setExpire(timeStamp + ENTRY_EXPIRE_TIME);
 		TCAMactive.remove(TCAMmapA[pkt]);
 		TCAMmapA[pkt] = TCAMactive.push_back(result);
+		if(this->getID() == 19)
+			printf("Hit SrcPort: %d, DstPort: %d \n", result.getSrcPort(),result.getDstPort());
 	}
 	/*else if(TCAMmapI.count(pkt) > 0){
 		result = TCAMmapI[pkt]->ent;
@@ -120,6 +122,9 @@ Event Switch::forward(double timeStamp, Packet pkt){
 	outputPort = result.getOutputPort();
 	timeStamp = timeStamp + TCAMDelay;
 	
+	if(pkt.getLastPacket())
+		printf("Last Switch ID: %d, Src: %d, Dst: %d \n", this->getID(), pkt.getSrcPort(), pkt.getDstPort());
+	
 	// Forward event
 	if(PKT_SIZE > pkt.getFlowSize())
 		forwardDelay = pkt.getFlowSize() / pkt.getDataRate();
@@ -135,16 +140,17 @@ Event Switch::forward(double timeStamp, Packet pkt){
 		tmpPkt = this->TCAMactive.back().getSample();
 		this->TCAMmapA.erase(tmpPkt);
 		this->TCAMactive.pop_back();
-		printf("find a recovery entry \n");
+		//printf("find a recovery entry \n");
 		
 		tmpPkt = cache[cache.size()-1].getSample();
 		//if no the entry in the TCAM entry, no flow setup from controller
 		if(this->TCAMmapA.count(tmpPkt) <=0)
 		{
 			TCAMmapA[tmpPkt] = TCAMactive.push_front(cache[cache.size()-1]);
-			cache.pop_back();
-			printf("replacement done \n");
+			//printf("replacement done \n");
 		}
+		
+		cache.pop_back();
 		
 	}
 	
