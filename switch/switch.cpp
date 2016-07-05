@@ -69,8 +69,8 @@ Event Switch::forward(double timeStamp, Packet pkt){
 		result.setExpire(timeStamp + ENTRY_EXPIRE_TIME);
 		TCAMactive.remove(TCAMmapA[pkt]);
 		TCAMmapA[pkt] = TCAMactive.push_back(result);
-		if(this->getID() == 19)
-			printf("Hit SrcPort: %d, DstPort: %d \n", result.getSrcPort(),result.getDstPort());
+		/*if(this->getID() == 19)
+			printf("Hit SrcPort: %d, DstPort: %d \n", result.getSrcPort(),result.getDstPort());*/
 	}
 	/*else if(TCAMmapI.count(pkt) > 0){
 		result = TCAMmapI[pkt]->ent;
@@ -122,8 +122,8 @@ Event Switch::forward(double timeStamp, Packet pkt){
 	outputPort = result.getOutputPort();
 	timeStamp = timeStamp + TCAMDelay;
 	
-	if(pkt.getLastPacket())
-		printf("Last Switch ID: %d, Src: %d, Dst: %d \n", this->getID(), pkt.getSrcPort(), pkt.getDstPort());
+	/*if(pkt.getLastPacket())
+		printf("Last Switch ID: %d, Src: %d, Dst: %d \n", this->getID(), pkt.getSrcPort(), pkt.getDstPort());*/
 	
 	// Forward event
 	if(PKT_SIZE > pkt.getFlowSize())

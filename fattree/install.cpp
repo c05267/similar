@@ -56,15 +56,15 @@ void Fattree::install(Event evt){
 		sw[nid]->TCAMmapA.erase(tmpPkt);
 		sw[nid]->TCAMactive.remove(ptr);*/
 		
-		if(sw[nid]->TCAMactive.front().getValue() < ent.getValue())
+		if(sw[nid]->TCAMactive.front().getValue() <= ent.getValue())
 		{
-			if(nid == 19)
+			/*if(nid == 19)
 			{
 				printf("Switch ID: %d , Top Entry Value: %f , New Entry Value: %f \n", nid, sw[nid]->TCAMactive.front().getValue(),ent.getValue());
 				printf("Top Entry ScrPort and DstPort: %d , %d , New Entry ScrPort and DstPort: %d , %d \n",sw[nid]->TCAMactive.front().getSrcPort(),sw[nid]->TCAMactive.front().getDstPort(),ent.getSrcPort(),ent.getDstPort());
 				printf("Back Entry Value: %f \n",sw[nid]->TCAMactive.back().getValue());
 				printf("Back Entry ScrPort and DstPort: %d , %d \n",sw[nid]->TCAMactive.back().getSrcPort(),sw[nid]->TCAMactive.back().getDstPort());
-			}
+			}*/
 			tmpEnt = sw[nid]->TCAMactive.front();
 			ent.setRecovery(true);
 			sw[nid]->cache.push_back(tmpEnt);

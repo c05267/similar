@@ -204,7 +204,7 @@ void Fattree::controller(Event ctrEvt){
 						}
 						else if(wired_replacement < wireless_replacement)
 						{
-							printf("temp \n");
+							//printf("temp \n");
 							// Reserve capacity
 							modifyCap(vent, -pkt.getDataRate(), false);
 							

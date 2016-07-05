@@ -21,7 +21,7 @@ void Fattree::endTransmission(double timeStamp, Packet pkt){
 
 		// All switches along the path
 		nowFlowID = rcdFlowID[pkt];
-		printf("End Transmission: %d, %d \n", pkt.getSrcPort(), pkt.getDstPort());
+		//printf("End Transmission: %d, %d \n", pkt.getSrcPort(), pkt.getDstPort());
 		for(int i = 0; i < allEntry[nowFlowID].size(); i++){
 
 			// Move from active to inactive
