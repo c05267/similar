@@ -16,7 +16,7 @@
 #define WIRELESS_RANGE 10.0
 
 /******** TCAM ********/
-#define MAX_TCAM_ENTRY 1000
+#define MAX_TCAM_ENTRY 1500
 #define ENTRY_EXPIRE_TIME 1e8
 
 /***** Threshold *****/
