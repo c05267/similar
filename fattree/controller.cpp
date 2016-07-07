@@ -30,7 +30,7 @@ void Fattree::controller(Event ctrEvt){
 	vector<Entry>copyVENT;
 	bool hasHandle = false;
 	int k;
-	int policy;
+
 
 	// Classify events
 	for(int i = 0; i < cumQue.size(); i++){
@@ -55,7 +55,7 @@ void Fattree::controller(Event ctrEvt){
 				nowFlowID = rcdFlowID[pkt];
 				vent.clear();
 				
-				printf("Know Flow\n");
+				//printf("Know Flow\n");
 				// Extract original entry
 				if(rule(nid, allEntry[nowFlowID], ent)){
 					ent.setExpire(ctrEvt.getTimeStamp() + flowSetupDelay + ENTRY_EXPIRE_TIME);
@@ -110,17 +110,35 @@ void Fattree::controller(Event ctrEvt){
 		// Time Stamp
 		temp = ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay;
 		
-		policy = rand()%2;
+
 		// Pure RANDOM!!!
-		if( (policy && wireless(nid, pkt, vent, temp)) || wired(nid, pkt, vent, temp)){
+		if( (rand()%2 && wireless(nid, pkt, vent, temp))){
 			
-			
-			//wireless/wired links are adopted and reserve the link capacity
-			if(policy ==1)
-				modifyCap(vent, -pkt.getDataRate(), true);
-			else
-				modifyCap(vent, -pkt.getDataRate(), false);
+			//reserve capacity
+			modifyCap(vent, -pkt.getDataRate(), true);
 				
+			// Install rule
+			for(int i = 0; i < vent.size(); i++){
+
+				// Switch side event
+				ret.setEventType(EVENT_INSTALL);
+				ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
+				ret.setID(vent[i].getSID());
+				ret.setPacket(pkt);
+				ret.setEntry(vent[i]);
+				eventQueue.push(ret);
+			}
+
+			// Record inserted entries
+			allEntry.push_back(vent);
+			// Clear Entry
+			vent.clear();
+		}
+		else if(wired(nid, pkt, vent, temp))
+		{
+			//reserve capacity
+			modifyCap(vent, -pkt.getDataRate(), false);
+			
 			// Install rule
 			for(int i = 0; i < vent.size(); i++){
 

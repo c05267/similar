@@ -50,7 +50,6 @@ void Fattree::start(void){
 
 			// Forwarding
 			case EVENT_FORWARD:
-				printf("Forward Event\n");
 //printf("[%6.1lf] Forward: %d at %d.\n", evt.getTimeStamp(), evt.getPacket().getSequence(), evt.getID());
 
 				// Has previous hop record
@@ -164,11 +163,8 @@ void Fattree::start(void){
 			// Cumulate until interval timeout
 			case EVENT_FLOWSETUP:
 //printf("[%6.1lf] Flow setup request: %d at %d.\n", evt.getTimeStamp(), evt.getPacket().getSequence(), evt.getID());
-				printf("Flow setup\n");
 				cumulate(evt);
-				printf("Flow setup 2\n");
 				controller(evt);
-				printf("Flow setup 3\n");
 				metric_flowSetupRequest ++;
 				break;
 
@@ -180,7 +176,6 @@ void Fattree::start(void){
 			// Install & forward
 			case EVENT_INSTALL:
 //printf("[%6.1lf] Install: %d at %d\n", evt.getTimeStamp(), evt.getPacket().getSequence(), evt.getID());
-				printf("Install Event\n");
 				install(evt);
 				metric_ruleInstallCount ++;
 
@@ -210,7 +205,6 @@ void Fattree::start(void){
 			// Flow transmission done
 			case EVENT_DONE:
 //printf("[%6.1lf] %d flows arrives\n", evt.getTimeStamp(), arrive);
-				printf("Done Event\n");
 				pkt = evt.getPacket();
 				if(pkt.getLastPacket())
 				{
@@ -220,7 +214,6 @@ void Fattree::start(void){
 					
 					// Update alive flows
 					endTransmission(evt.getTimeStamp(), evt.getPacket());
-					printf("Done Event 1\n");
 					// Percentage
 					arrive ++;
 					perCent = (arrive*100)/totFlow;
@@ -228,7 +221,6 @@ void Fattree::start(void){
 						printf("%3d%% (%d/%d) done.\n", perCent, arrive, totFlow);
 						prevPerCent = perCent;
 					}
-					printf("Done Event 2\n");
 		
 					// Flow arrival time
 					metric_avgFlowCompleteTime += (evt.getTimeStamp() - metric_flowArrivalTime[evt.getPacket().getSequence()]);
