@@ -3,7 +3,7 @@
 #define PARAMETER_H
 
 /******** K *******/
-#define SIZE_OF_K 20
+#define SIZE_OF_K 16
 
 /******** Delays ********/
 #define TCAM_SEARCH_DELAY 28.5
@@ -17,6 +17,7 @@
 
 /******** TCAM ********/
 #define MIN_TCAM_ENTRY 500
-#define MAX_TCAM_ENTRY 2500
+#define MAX_TCAM_ENTRY 1500
 #define ENTRY_EXPIRE_TIME 1e7
+#define PKT_SIZE 1400
 #endif

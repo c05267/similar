@@ -18,7 +18,7 @@ void Fattree::controller(Event ctrEvt){
 	int nid;
 	int pathLen;
 	int nowFlowID;
-	int temp;
+	double temp;
 	double delay;
 	double flowSetupDelay = FLOW_SETUP_DELAY;
 	double computePathDelay = CONTROL_PATH_DELAY;
@@ -27,8 +27,10 @@ void Fattree::controller(Event ctrEvt){
 	Entry ent;
 	vector<Event>flowSetupEvent;
 	vector<Entry>vent;
+	vector<Entry>copyVENT;
 	bool hasHandle = false;
 	int k;
+	int policy;
 
 	// Classify events
 	for(int i = 0; i < cumQue.size(); i++){
@@ -52,7 +54,8 @@ void Fattree::controller(Event ctrEvt){
 			else if(rcdFlowID[pkt]){
 				nowFlowID = rcdFlowID[pkt];
 				vent.clear();
-
+				
+				printf("Know Flow\n");
 				// Extract original entry
 				if(rule(nid, allEntry[nowFlowID], ent)){
 					ent.setExpire(ctrEvt.getTimeStamp() + flowSetupDelay + ENTRY_EXPIRE_TIME);
@@ -101,13 +104,23 @@ void Fattree::controller(Event ctrEvt){
 		// Assign flow ID
 		nowFlowID = flowIDCount ++;
 		rcdFlowID[pkt] = nowFlowID;
-
+		
+		// Clear entry
+		vent.clear();
 		// Time Stamp
 		temp = ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay;
-
+		
+		policy = rand()%2;
 		// Pure RANDOM!!!
-		if( (rand()%2 && wireless(nid, pkt, vent, temp)) || wired(nid, pkt, vent, temp)){
-
+		if( (policy && wireless(nid, pkt, vent, temp)) || wired(nid, pkt, vent, temp)){
+			
+			
+			//wireless/wired links are adopted and reserve the link capacity
+			if(policy ==1)
+				modifyCap(vent, -pkt.getDataRate(), true);
+			else
+				modifyCap(vent, -pkt.getDataRate(), false);
+				
 			// Install rule
 			for(int i = 0; i < vent.size(); i++){
 
@@ -122,6 +135,8 @@ void Fattree::controller(Event ctrEvt){
 
 			// Record inserted entries
 			allEntry.push_back(vent);
+			// Clear Entry
+			vent.clear();
 		}
 
 		// No route!!!!??
@@ -142,9 +157,9 @@ void Fattree::controller(Event ctrEvt){
 //if(hasHandle) printf("[%6.1lf] Controller: Waiting for next handle...\n", ctrEvt.getTimeStamp());
 
 	// The next timeout time
-	evt = ctrEvt;
+	/*evt = ctrEvt;
 	evt.setEventType(EVENT_INTERVAL);
 	evt.setTimeStamp(evt.getTimeStamp()+CONTROL_BATCH);
-	eventQueue.push(evt);
+	eventQueue.push(evt);*/
 	return;
 }

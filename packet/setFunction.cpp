@@ -27,3 +27,12 @@ void Packet::setFlowSize(unsigned int flowSize){
 void Packet::setDataRate(double dataRate){
 	this->dataRate = dataRate;
 }
+void Packet::setFirstPacket(bool tag){
+	this->firstPacket = tag;
+}
+void Packet::setLastPacket(bool tag){
+	this->lastPacket = tag;
+}
+void Packet::setIsDivided(bool di){
+	this->Divided = di;
+}
