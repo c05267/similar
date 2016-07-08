@@ -143,10 +143,30 @@ void Fattree::controller(Event ctrEvt){
 
 			// Wirless policy first, then wired policy
 			temp = ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay;
-			if(wireless(nid, pkt, vent, temp) || wired(nid, pkt, vent, temp)){
+			if(wireless(nid, pkt, vent, temp)){
 				
 				// Reserve capacity
 				modifyCap(vent, -pkt.getDataRate(), true);
+
+				// Install rule
+				for(int i = 0; i < vent.size(); i++){
+
+					// Switch side event
+					ret.setEventType(EVENT_INSTALL);
+					ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
+					ret.setID(vent[i].getSID());
+					ret.setPacket(pkt);
+					ret.setEntry(vent[i]);
+					eventQueue.push(ret);
+				}
+
+				// Record inserted entries
+				allEntry.push_back(vent);
+			}
+			else if(wired(nid, pkt, vent, temp))
+			{
+				// Reserve capacity
+				modifyCap(vent, -pkt.getDataRate(), false);
 
 				// Install rule
 				for(int i = 0; i < vent.size(); i++){
@@ -213,6 +233,8 @@ void Fattree::controller(Event ctrEvt){
 					ret.setEntry(vent[i]);
 					eventQueue.push(ret);
 				}
+				// Record inserted entries
+				allEntry.push_back(vent);
 			}
 
 			// No such path exists
