@@ -281,8 +281,6 @@ void Fattree::controller(Event ctrEvt){
 			// Wired CAP
 			if(wired(nid, pkt, vent, temp)){
 				
-				// Reserve capacity
-				modifyCap(vent, -pkt.getDataRate(), false);
 				
 				// Copy for later use
 				copyVENT = vent;
@@ -295,6 +293,9 @@ void Fattree::controller(Event ctrEvt){
 
 						// Wireless TCAM
 						if(!isTCAMfull(vent, false)){
+							
+							// Reserve capacity
+							modifyCap(vent, -pkt.getDataRate(), true);
 
 							// Install wireless rule
 							for(int i = 0; i < vent.size(); i++){
@@ -313,6 +314,9 @@ void Fattree::controller(Event ctrEvt){
 						}
 					}
 				}
+				
+				// Reserve capacity
+				modifyCap(copyVENT, -pkt.getDataRate(), false);
 
 				// Install wired rule
 				for(int i = 0; i < copyVENT.size(); i++){
@@ -331,6 +335,9 @@ void Fattree::controller(Event ctrEvt){
 			
 			// Wireless CAP
 			else if(wireless(nid, pkt, vent, temp)){
+				
+				// Reserve capacity
+				modifyCap(vent, -pkt.getDataRate(), true);
 
 				// Install wireless rule
 				for(int i = 0; i < vent.size(); i++){
