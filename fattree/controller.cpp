@@ -273,7 +273,7 @@ void Fattree::controller(Event ctrEvt){
 				}
 				
 				// Reserve capacity
-				modifyCap(vent, -pkt.getDataRate(), false);
+				modifyCap(copyVENT, -pkt.getDataRate(), false);
 
 				// Install wired rule
 				for(int i = 0; i < copyVENT.size(); i++){
