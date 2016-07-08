@@ -27,3 +27,12 @@ unsigned int Packet::getFlowSize(void){
 double Packet::getDataRate(void){
 	return dataRate;
 }
+bool Packet::getFirstPacket(void){
+	return this->firstPacket;
+}
+bool Packet::getLastPacket(void){
+	return this->lastPacket;
+}
+bool Packet::getIsDivided(void){
+	return this->Divided;
+}

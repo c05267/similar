@@ -18,7 +18,7 @@ void Fattree::controller(Event ctrEvt){
 	int nid;
 	int pathLen;
 	int nowFlowID;
-	int temp;
+	double temp;
 	double delay;
 	double flowSetupDelay = FLOW_SETUP_DELAY;
 	double computePathDelay = CONTROL_PATH_DELAY;
@@ -107,6 +107,9 @@ void Fattree::controller(Event ctrEvt){
 			// You MUST use wired :)
 			temp = ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay;
 			if(wired(nid, pkt, vent, temp)){
+				
+				// Reserve capacity
+				modifyCap(vent, -pkt.getDataRate(), false);
 
 				// Install rule
 				for(int i = 0; i < vent.size(); i++){
@@ -141,6 +144,9 @@ void Fattree::controller(Event ctrEvt){
 			// Wirless policy first, then wired policy
 			temp = ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay;
 			if(wireless(nid, pkt, vent, temp) || wired(nid, pkt, vent, temp)){
+				
+				// Reserve capacity
+				modifyCap(vent, -pkt.getDataRate(), true);
 
 				// Install rule
 				for(int i = 0; i < vent.size(); i++){
@@ -171,8 +177,11 @@ void Fattree::controller(Event ctrEvt){
 
 			// Wired policy first, then wireless policy
 			temp = ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay;
-			if(wired(nid, pkt, vent, temp) || wireless(nid, pkt, vent, temp)){
+			if(wired(nid, pkt, vent, temp)){
 
+				// Reserve capacity
+				modifyCap(vent, -pkt.getDataRate(), false);
+				
 				// Install rule
 				for(int i = 0; i < vent.size(); i++){
 
@@ -187,6 +196,23 @@ void Fattree::controller(Event ctrEvt){
 
 				// Record inserted entries
 				allEntry.push_back(vent);
+			}
+			else if(wireless(nid, pkt, vent, temp))
+			{
+				// Reserve capacity
+				modifyCap(vent, -pkt.getDataRate(), true);
+				
+				// Install rule
+				for(int i = 0; i < vent.size(); i++){
+
+					// Switch side event
+					ret.setEventType(EVENT_INSTALL);
+					ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
+					ret.setID(vent[i].getSID());
+					ret.setPacket(pkt);
+					ret.setEntry(vent[i]);
+					eventQueue.push(ret);
+				}
 			}
 
 			// No such path exists
@@ -208,9 +234,9 @@ void Fattree::controller(Event ctrEvt){
 //if(hasHandle) printf("[%6.1lf] Controller: Waiting for next handle...\n", ctrEvt.getTimeStamp());
 
 	// The next timeout time
-	evt = ctrEvt;
+	/*evt = ctrEvt;
 	evt.setEventType(EVENT_INTERVAL);
 	evt.setTimeStamp(evt.getTimeStamp()+CONTROL_BATCH);
-	eventQueue.push(evt);
+	eventQueue.push(evt);*/
 	return;
 }

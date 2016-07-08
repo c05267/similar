@@ -15,18 +15,26 @@
 void Fattree::readInput(void){
 
 	// Variables
-	int byte[4], srcPort, dstPort, protocol, seq, flowSize;
+	int byte[4], srcPort, dstPort, protocol, seq, flowSize, numberOfPacket;
 	char charSrcIP[20], charDstIP[20];
 	double timeStamp, dataRate;
 	IP dstIP, srcIP;
 	Event evt;
 	Packet pkt;
+	int hostID;
 
 	// Packets (5-tuples and arrival time)
 	seq = 1;
 	while(scanf("%s %s %d %d %d %lf %d %lf", charSrcIP, charDstIP, 
 				&srcPort, &dstPort, &protocol, &timeStamp, &flowSize, &dataRate) == 8){
 
+		if(flowSize <= PKT_SIZE)
+			numberOfPacket = 1;
+		else
+			numberOfPacket =  ceil((double)flowSize/(double)PKT_SIZE);
+		
+		totFlow++;		
+				
 		// Setup Packet Info
 		srcIP.setIP(charSrcIP);
 		dstIP.setIP(charDstIP);
@@ -35,19 +43,33 @@ void Fattree::readInput(void){
 		pkt.setSrcPort(srcPort);
 		pkt.setDstPort(dstPort);
 		pkt.setProtocol(protocol);
-		pkt.setSequence(seq++);
+		pkt.setSequence(seq);
 		pkt.setFlowSize(flowSize);
 		pkt.setDataRate(dataRate);
 
+		//add packet attribution
+		pkt.setFirstPacket(true);
+		pkt.setIsDivided(false);
+
+		//last packet
+		if(flowSize <= PKT_SIZE)
+			pkt.setLastPacket(true);
+		else
+			pkt.setLastPacket(false);
+		
 		// Put into event queue
 		evt.setTimeStamp(timeStamp);
 		evt.setEventType(EVENT_FORWARD);
 		evt.setPacket(pkt);
-		evt.setID(numberOfCore + numberOfAggregate + numberOfEdge + 
-					srcIP.byte[1]*pod*pod/4 + srcIP.byte[2]*pod/2 + srcIP.byte[3]-2);
+		//Delivery to first switch
+		hostID = numberOfCore + numberOfAggregate + numberOfEdge + 
+		srcIP.byte[1]*pod*pod/4 + srcIP.byte[2]*pod/2 + srcIP.byte[3]-2;
+		evt.setID(node[hostID]->link[0].id);
 		eventQueue.push(evt);
+		seq++;
 
 		// Record flow arrival time
 		metric_flowArrivalTime[seq-1] = timeStamp;
+		numOfPackets[pkt] = numberOfPacket - 1;
 	}
 }

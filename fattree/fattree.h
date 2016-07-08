@@ -36,6 +36,7 @@ class Fattree{
 		int numberOfEdge;				// Number of edge switches
 		int numberOfHost;				// Number of hosts
 		int flowIDCount;				// Current flow ID count
+		int totFlow;					// number of flows
 		double compAvail;				// Controller available time (not used)
 		Node **node;					// All nodes
 		Switch **sw;					// All switches
@@ -45,6 +46,7 @@ class Fattree{
 		vector<Event>cumQue;			// Cumulated event queue
 		map<int,PrevHop>prevHop;		// Previous hop
 		map<Packet,int>aliveFlow;		// Number of alive flow currently in the network
+		map<Packet,int>numOfPackets;	// Number of remaining packets for each flow
 
 		// Private method
 		void controller(Event);			// Handles a batch of flow setup requests
@@ -54,11 +56,11 @@ class Fattree{
 		void wirelessSP(void);			// Pre-process wireless shortest path
 		bool rule(int,vector<Entry>,Entry&);	// Extract rule from flow path
 		int pathInit(Packet,map<int,int>&);		// Initialize the prev array with -1
-		bool wired(int,Packet,vector<Entry>&,int);		// Wired policy
-		bool wireless(int,Packet,vector<Entry>&,int);	// Wireless policy
+		bool wired(int,Packet,vector<Entry>&,double);		// Wired policy
+		bool wireless(int,Packet,vector<Entry>&,double);	// Wireless policy
 		double vecdot(double[],double[],double[],double[]);	// Calculate vector dot
 		double vecdis(double[],double[],double[],double[]);	// Calculate vector distance
-		void updateTCAM(int,int);		// Remove expired entries
+		void updateTCAM(int,double);		// Remove expired entries
 		void recrdPrev(Event,Event);	// Record previous hop information
 		void modCap(int,int,double);	// Release capacity of previous hop
 		bool blockFlow(Event,Event);	// Check if capacity is enough or not
@@ -67,6 +69,7 @@ class Fattree{
 		int wirelessHop(Packet);		// Calculate hops if using wireless path
 		void begTransmission(double,Packet);	// Called when transmission starts
 		void endTransmission(double,Packet);	// Called when transmission finishes
+		void modifyCap(vector<Entry>&, double, bool);	// Modify capacity of wired/wireless path
 
 		// Metric
 		int metric_flowSetupRequest;
