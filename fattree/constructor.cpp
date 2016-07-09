@@ -180,10 +180,10 @@ Fattree::Fattree(int k){
 	srand((unsigned)time(NULL));
 
 	// Controller interval timeout event
-	Event evt;
+	/*Event evt;
 	evt.setEventType(EVENT_INTERVAL);
 	evt.setTimeStamp(CONTROL_BATCH);
-	eventQueue.push(evt);
+	eventQueue.push(evt);*/
 
 	// Wireless Shortest Path
 	wirelessSP();

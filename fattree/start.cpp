@@ -75,6 +75,7 @@ void Fattree::start(void){
 					/*printf("start: Number of remaining packets: %d \n", numOfPackets[pkt]);
 					printf("Hello world \n");*/
 					pkt.setIsDivided(true);
+					evt.setPacket(pkt);
 					
 					srcIP = pkt.getSrcIP();
 					tmp2.setSrcIP(pkt.getSrcIP());
@@ -162,13 +163,14 @@ void Fattree::start(void){
 			case EVENT_FLOWSETUP:
 //printf("[%6.1lf] Flow setup request: %d at %d.\n", evt.getTimeStamp(), evt.getPacket().getSequence(), evt.getID());
 				cumulate(evt);
+				controller(evt);
 				metric_flowSetupRequest ++;
 				break;
 
 			// Interval timeout: handle batch of flow setup requests
-			case EVENT_INTERVAL:
+			/*case EVENT_INTERVAL:
 				controller(evt);
-				break;
+				break;*/
 
 			// Install & forward
 			case EVENT_INSTALL:
@@ -208,7 +210,6 @@ void Fattree::start(void){
 				{
 				
 					// Release capacity for this flow along the path
-					pkt = evt.getPacket();
 					vent = allEntry[ rcdFlowID[pkt] ];
 					modifyCap(vent, pkt.getDataRate(), vent[0].isWireless());
 					

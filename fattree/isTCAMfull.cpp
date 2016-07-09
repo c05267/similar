@@ -21,26 +21,15 @@ bool Fattree::isTCAMfull(const vector<Entry>& nodes, bool isWired){
 
 		// Count full nodes
 		numOfFull = 0;
-		/*for(int i = 0; i < numberOfCore + numberOfAggregate; i++){
+		for(int i = 0; i < numberOfCore + numberOfAggregate; i++){
 
 			// Extract TCAM usage
 			usage = (sw[i]->TCAMactive.size());
 			if(usage >= THR_TCAM_FULL*MAX_TCAM_ENTRY) numOfFull ++;
-		}*/
-		
-		for(int i = 0; i < nodes.size(); i++){
-
-			// Extract TCAM usage
-			sid = nodes[i].getSID();
-			if(sid < numberOfCore + numberOfAggregate)
-			{
-				usage = (sw[sid]->TCAMactive.size());
-				if(usage >= THR_TCAM_FULL*MAX_TCAM_ENTRY) numOfFull ++;
-			}
 		}
 
 		// Exceed ratio
-		if((numOfFull+0.0)/nodes.size() > THR_WIRED)
+		if((numOfFull+0.0)/(numberOfCore+numberOfAggregate) > THR_WIRED)
 			return true;
 		return false;
 	}
