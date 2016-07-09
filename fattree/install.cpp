@@ -50,13 +50,13 @@ void Fattree::install(Event evt){
 
 		// Active TCAM
 
-		ptr = sw[nid]->TCAMactive.pop_value();
+		/*ptr = sw[nid]->TCAMactive.pop_value();
 		tmpPkt = ptr->ent.getSample();
 		sw[nid]->TCAMmapA.erase(tmpPkt);
-		sw[nid]->TCAMactive.remove(ptr);
-		/*tmpPkt = sw[nid]->TCAMactive.front().getSample();
+		sw[nid]->TCAMactive.remove(ptr);*/
+		tmpPkt = sw[nid]->TCAMactive.front().getSample();
 		sw[nid]->TCAMmapA.erase(tmpPkt);
-		sw[nid]->TCAMactive.pop_front();*/
+		sw[nid]->TCAMactive.pop_front();
 		
 
 		// Count
