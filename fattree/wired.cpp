@@ -6,7 +6,7 @@
 #include "../IP/IP.h"
 
 // Wired policy
-bool Fattree::wired(int nid, Packet pkt, vector<Entry>& vent, int timeStamp){
+bool Fattree::wired(int nid, Packet pkt, vector<Entry>& vent, double timeStamp){
 
 	// IP
 	IP srcIP = pkt.getSrcIP();

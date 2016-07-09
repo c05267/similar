@@ -36,7 +36,7 @@ class Fattree{
 		int numberOfEdge;				// Number of edge switches
 		int numberOfHost;				// Number of hosts
 		int flowIDCount;				// Current flow ID count
-		int totFlow;
+		int totFlow;					// number of flows
 		double compAvail;				// Controller available time (not used)
 		Node **node;					// All nodes
 		Switch **sw;					// All switches
@@ -56,8 +56,8 @@ class Fattree{
 		void wirelessSP(void);			// Pre-process wireless shortest path
 		bool rule(int,vector<Entry>,Entry&);	// Extract rule from flow path
 		int pathInit(Packet,map<int,int>&);		// Initialize the prev array with -1
-		bool wired(int,Packet,vector<Entry>&,int);		// Wired policy
-		bool wireless(int,Packet,vector<Entry>&,int);	// Wireless policy
+		bool wired(int,Packet,vector<Entry>&,double);		// Wired policy
+		bool wireless(int,Packet,vector<Entry>&,double);	// Wireless policy
 		double vecdot(double[],double[],double[],double[]);	// Calculate vector dot
 		double vecdis(double[],double[],double[],double[]);	// Calculate vector distance
 		void updateTCAM(int,double);		// Remove expired entries
