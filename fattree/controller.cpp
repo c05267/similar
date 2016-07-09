@@ -166,7 +166,7 @@ void Fattree::controller(Event ctrEvt){
 					if(wired(nid, pkt, vent, temp)){
 					
 						//calculate wireless rule replacements
-						for(int i = 0; i < copyVENT.size(); i++)
+						/*for(int i = 0; i < copyVENT.size(); i++)
 						{
 							wireless_replacement += sw[copyVENT[i].getSID()]->Get_Rule_Replacement();
 							//printf("Wireless Switch: %d \n", sw[copyVENT[i].getSID()]->Get_Rule_Replacement());
@@ -177,7 +177,7 @@ void Fattree::controller(Event ctrEvt){
 						{
 							wired_replacement += sw[vent[i].getSID()]->Get_Rule_Replacement();
 							//printf("Wired Switch: %d \n", sw[vent[i].getSID()]->Get_Rule_Replacement());
-						}
+						}*/
 						
 						//printf("Wired Rep: %d, Wireless Rep: %d \n", wired_replacement, wireless_replacement);
 
@@ -202,7 +202,7 @@ void Fattree::controller(Event ctrEvt){
 							allEntry.push_back(vent);
 							continue;
 						}
-						else if(wired_replacement < wireless_replacement)
+						/*else if(wired_replacement < wireless_replacement)
 						{
 							//printf("temp \n");
 							// Reserve capacity
@@ -222,7 +222,7 @@ void Fattree::controller(Event ctrEvt){
 							// Record inserted entries
 							allEntry.push_back(vent);
 							continue;
-						}
+						}*/
 					}
 				}
 				
