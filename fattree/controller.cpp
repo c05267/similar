@@ -168,14 +168,16 @@ void Fattree::controller(Event ctrEvt){
 						//calculate wireless rule replacements
 						for(int i = 0; i < copyVENT.size(); i++)
 						{
-							wireless_replacement += sw[copyVENT[i].getSID()]->Get_Rule_Replacement();
+							if(sw[copyVENT[i].getSID()]->TCAMactive.size() >= MAX_TCAM_ENTRY)
+								wireless_replacement++;
 							//printf("Wireless Switch: %d \n", sw[copyVENT[i].getSID()]->Get_Rule_Replacement());
 						}
 						
 						//calculate wired rule replacements
 						for(int i = 0; i < vent.size(); i++)
 						{
-							wired_replacement += sw[vent[i].getSID()]->Get_Rule_Replacement();
+							if(sw[vent[i].getSID()]->TCAMactive.size() >= MAX_TCAM_ENTRY)
+								wired_replacement++;
 							//printf("Wired Switch: %d \n", sw[vent[i].getSID()]->Get_Rule_Replacement());
 						}
 						
