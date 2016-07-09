@@ -295,7 +295,7 @@ void Fattree::controller(Event ctrEvt){
 			else if(wireless(nid, pkt, vent, temp)){
 				
 				// Reserve capacity
-				modifyCap(vent, -pkt.getDataRate(), false);
+				modifyCap(vent, -pkt.getDataRate(), true);
 
 				// Install wireless rule
 				for(int i = 0; i < vent.size(); i++){
