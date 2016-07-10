@@ -31,6 +31,7 @@ void Fattree::controller(Event ctrEvt){
 	bool hasHandle = false;
 	int k;
 	int wired_replacement, wireless_replacement;
+	double longLivedFlow;
 
 	// Classify events
 	for(int i = 0; i < cumQue.size(); i++){
@@ -106,12 +107,15 @@ void Fattree::controller(Event ctrEvt){
 		// Assign flow ID
 		nowFlowID = flowIDCount ++;
 		rcdFlowID[pkt] = nowFlowID;
+		
+		//Flow duration
+		longLivedFlow = pkt.getFlowSize()/(pkt.getDataRate()*1000000);
 
 		// Clear entry
 		vent.clear();
 
 		// LARGE FLOW!!!!!!
-		if(pkt.getDataRate() >= 0.125){
+		if(pkt.getDataRate() >= 0.125 || longLivedFlow >= 8.0){
 
 			// You MUST use wired :)
 			temp = ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay;
