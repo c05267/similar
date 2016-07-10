@@ -17,12 +17,12 @@
 
 /******** TCAM ********/
 #define MAX_TCAM_ENTRY 1500
-#define ENTRY_EXPIRE_TIME 1e8
+#define ENTRY_EXPIRE_TIME 1e7
 
 /***** Threshold *****/
 #define THR_WIRED 0.0
 #define THR_WIRELESS 0.0
 #define THR_TCAM_FULL 1.0
-#define Long_lived_THR 200.0
+#define Long_lived_THR 0.5
 #define PKT_SIZE 1400
 #endif
