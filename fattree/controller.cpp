@@ -116,7 +116,7 @@ void Fattree::controller(Event ctrEvt){
 		//printf("Long Flow: %f\n", longLivedFlow);
 		
 		// LARGE FLOW!!!!!!
-		if(pkt.getDataRate() >= 0.125 || longLivedFlow >= 8.0){
+		if(pkt.getDataRate() >= 0.125 || longLivedFlow >= 11.0){
 
 			// You MUST use wired :)
 			temp = ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay;
