@@ -29,7 +29,7 @@ void Fattree::begTransmission(double timeStamp, Packet pkt){
 				printf("BegStart: %d\n", nid);
 
 				// Remove from inactive
-				if(sw[nid]->TCAMmapI.count(pkt) > 0){
+				/*if(sw[nid]->TCAMmapI.count(pkt) > 0){
 					sw[nid]->TCAMinactive.remove(sw[nid]->TCAMmapI[pkt]);
 					sw[nid]->TCAMmapI.erase(pkt);
 					printf("I to A\n");
@@ -37,7 +37,7 @@ void Fattree::begTransmission(double timeStamp, Packet pkt){
 					// Update timestamp &  Install at the tail (LRU)
 					ent.setExpire(timeStamp + ENTRY_EXPIRE_TIME);
 					sw[nid]->TCAMmapA[pkt] = sw[nid]->TCAMactive.push_back(ent);
-				}
+				}*/
 			}
 		}
 		

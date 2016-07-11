@@ -34,11 +34,11 @@ void Fattree::endTransmission(double timeStamp, Packet pkt){
 				sw[nid]->TCAMmapA.erase(pkt);
 				//printf("XDDDggggg\n");
 				// Install at the tail (LRU)
-				if(sw[nid]->TCAMmapI.count(pkt) == 0)
+				/*if(sw[nid]->TCAMmapI.count(pkt) == 0)
 				{
 					sw[nid]->TCAMmapI[pkt] = sw[nid]->TCAMinactive.push_back(ent);
 					//printf("XDDDDDDDXX\n");
-				}
+				}*/
 			}
 			//printf("A = %d, I = %d\n", sw[nid]->TCAMactive.size(), sw[nid]->TCAMinactive.size());
 		}

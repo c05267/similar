@@ -19,7 +19,7 @@ void Fattree::updateTCAM(int nid, double timeStamp){
 	}
 
 	// The most front entries (Inactive)
-	while(!sw[nid]->TCAMinactive.empty()){
+	/*while(!sw[nid]->TCAMinactive.empty()){
 		if(sw[nid]->TCAMinactive.front().isExpired(timeStamp)){
 			tmpPkt = sw[nid]->TCAMinactive.front().getSample();
 			sw[nid]->TCAMmapI.erase(tmpPkt);
@@ -27,5 +27,5 @@ void Fattree::updateTCAM(int nid, double timeStamp){
 			printf("KKKKKKK \n");
 		}
 		else break;
-	}
+	}*/
 }

@@ -53,7 +53,7 @@ Event Switch::forward(double timeStamp, Packet pkt){
 		}
 		else break;
 	}
-	while(!TCAMinactive.empty()){
+	/*while(!TCAMinactive.empty()){
 		if(TCAMinactive.front().isExpired(timeStamp)){
 			tmpPkt = TCAMinactive.front().getSample();
 			TCAMmapI.erase(tmpPkt);
@@ -61,7 +61,7 @@ Event Switch::forward(double timeStamp, Packet pkt){
 			//printf("ssssssssss \n");
 		}
 		else break;
-	}
+	}*/
 
 	// Search in TCAM
 	int pri = -1;
@@ -74,7 +74,7 @@ Event Switch::forward(double timeStamp, Packet pkt){
 		TCAMactive.remove(TCAMmapA[pkt]);
 		TCAMmapA[pkt] = TCAMactive.push_back(result);
 	}
-	else if(TCAMmapI.count(pkt) > 0){
+	/*else if(TCAMmapI.count(pkt) > 0){
 		result = TCAMmapI[pkt]->ent;
 		pri = 0;
 		// Remove from inactive
@@ -84,7 +84,7 @@ Event Switch::forward(double timeStamp, Packet pkt){
 		// Update timestamp &  Install at the tail (LRU)
 		result.setExpire(timeStamp + ENTRY_EXPIRE_TIME);
 		TCAMmapA[pkt] = TCAMactive.push_back(result);
-	}
+	}*/
 
 	// Entry not found
 	if(pri == -1){
