@@ -115,7 +115,7 @@ void Fattree::controller(Event ctrEvt){
 		vent.clear();
 
 		// LARGE FLOW!!!!!!
-		if(pkt.getDataRate() >= 0.125 || longLivedFlow >= 11.0){
+		if(pkt.getDataRate() >= 0.125){
 
 			// You MUST use wired :)
 			temp = ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay;
@@ -164,7 +164,7 @@ void Fattree::controller(Event ctrEvt){
 				copyVENT = vent;
 
 				// Wireless TCAM
-				if(isTCAMfull(vent, false)){
+				if(isTCAMfull(vent, false) && wirelessHop(pkt) >=2 ){
 
 					// Wired CAP
 					if(wired(nid, pkt, vent, temp)){
@@ -228,6 +228,28 @@ void Fattree::controller(Event ctrEvt){
 							continue;
 						}
 					}
+				}
+				else if(longLivedFlow >= 8.0 && wirelessHop(pkt) >=2)
+				{
+					if(wired(nid, pkt, vent, temp)){
+						modifyCap(vent, -pkt.getDataRate(), false);
+							
+						// Install wired rule
+						for(int i = 0; i < vent.size(); i++){
+
+							// Switch side event
+							ret.setEventType(EVENT_INSTALL);
+							ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
+							ret.setID(vent[i].getSID());
+							ret.setPacket(pkt);
+							ret.setEntry(vent[i]);
+							eventQueue.push(ret);
+						}
+						// Record inserted entries
+						allEntry.push_back(vent);
+						continue;
+					}
+					
 				}
 				
 				// Reserve capacity
