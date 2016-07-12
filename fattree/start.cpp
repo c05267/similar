@@ -32,6 +32,10 @@ void Fattree::start(void){
 	int hostID;
 	IP srcIP;
 	vector<Entry>vent;
+	//Flow duration
+    double longLivedFlow;
+	int long_lived[2] = {0,0};
+	int short_lived[2] = {0,0};
 	//int total = 0;
 
 	// Event queue
@@ -113,6 +117,8 @@ void Fattree::start(void){
 				// Try to forward
 				next = node[evt.getID()]->forward(evt.getTimeStamp(), evt.getPacket());
 				pkt = next.getPacket();
+				//Flow duration
+				longLivedFlow = pkt.getFlowSize()/(pkt.getDataRate()*1000000);
 				
 				// Forward event
 				if(next.getEventType() == EVENT_FORWARD){
@@ -125,8 +131,20 @@ void Fattree::start(void){
 							// Up to aggr or core only
 							if(evt.getPacket().getSrcIP().byte[1] != evt.getPacket().getDstIP().byte[1]
 									|| evt.getPacket().getSrcIP().byte[2] != evt.getPacket().getDstIP().byte[2]){
-								if(allEntry[nowFlowID][0].isWireless())	numberOfWirelessFlow ++;
-								else numberOfWiredFlow ++;
+								if(allEntry[nowFlowID][0].isWireless()){
+									numberOfWirelessFlow ++;
+									if(longLivedFlow >= 8.0)
+										long_lived[0]++;
+									else
+										short_lived[0]++;
+									}
+								else{
+									numberOfWiredFlow ++;
+									if(longLivedFlow >= 8.0)
+										long_lived[1]++;
+									else
+										short_lived[1]++;
+								}
 							}
 						}
 					}
@@ -236,6 +254,8 @@ void Fattree::start(void){
 						printf("Avg. flow completion time: %.3lf\n", metric_avgFlowCompleteTime/totFlow);
 						printf("Wireless:Wired = %d:%d\n", numberOfWirelessFlow, numberOfWiredFlow);
 						printf("Replacement %d / %d / %d\n", ruleReplacementCore, ruleReplacementAggr, ruleReplacementEdge);
+						printf("Long lived flow to wireless: %d , %d, %d, %d\n", Wireless_D, Wireless_C, Wireless_E, Wireless_G);
+						printf("Long lived: %d , %d, short lived: %d , %d \n", 	long_lived[0], long_lived[1], short_lived[0], short_lived[1]);
 						/*for(int i=0; i<numberOfCore+numberOfAggregate+numberOfEdge; i++)
 						{
 							total = total + sw[i]->Get_Rule_Replacement();

@@ -48,6 +48,7 @@ class Fattree{
 		map<int,PrevHop>prevHop;		// Previous hop
 		map<Packet,int>aliveFlow;		// Number of alive flow currently in the network
 		map<Packet,int>numOfPackets;	// Number of remaining packets for each flow
+		int Wireless_D, Wireless_C, Wireless_E, Wireless_G;
 
 		// Private method
 		void controller(Event);			// Handles a batch of flow setup requests
