@@ -116,7 +116,7 @@ void Fattree::controller(Event ctrEvt){
 		//printf("Long Flow: %f\n", longLivedFlow);
 		
 		// LARGE FLOW!!!!!!
-		if(pkt.getDataRate() >= 0.125 || longLivedFlow >= 11.0){
+		if(pkt.getDataRate() >= 0.125){
 
 			// You MUST use wired :)
 			temp = ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay;
@@ -165,13 +165,13 @@ void Fattree::controller(Event ctrEvt){
 				copyVENT = vent;
 
 				// Wireless TCAM
-				if(isTCAMfull(vent, false)){
+				if(isTCAMfull(vent, false) && wirelessHop(pkt) >=2){
 
 					// Wired CAP
 					if(wired(nid, pkt, vent, temp)){
 					
 						//calculate wireless rule replacements
-						/*for(int i = 0; i < copyVENT.size(); i++)
+						for(int i = 0; i < copyVENT.size(); i++)
 						{
 							wireless_replacement += sw[copyVENT[i].getSID()]->Get_Rule_Replacement();
 							//printf("Wireless Switch: %d \n", sw[copyVENT[i].getSID()]->Get_Rule_Replacement());
@@ -182,7 +182,7 @@ void Fattree::controller(Event ctrEvt){
 						{
 							wired_replacement += sw[vent[i].getSID()]->Get_Rule_Replacement();
 							//printf("Wired Switch: %d \n", sw[vent[i].getSID()]->Get_Rule_Replacement());
-						}*/
+						}
 						
 						//printf("Wired Rep: %d, Wireless Rep: %d \n", wired_replacement, wireless_replacement);
 
@@ -207,7 +207,7 @@ void Fattree::controller(Event ctrEvt){
 							allEntry.push_back(vent);
 							continue;
 						}
-						/*else if(wired_replacement < wireless_replacement)
+						else if(wired_replacement < wireless_replacement)
 						{
 							//printf("temp \n");
 							// Reserve capacity
@@ -227,7 +227,28 @@ void Fattree::controller(Event ctrEvt){
 							// Record inserted entries
 							allEntry.push_back(vent);
 							continue;
-						}*/
+						}
+					}
+				}
+				else if(longLivedFlow >= 8.0 && wirelessHop(pkt) >=2)
+				{
+					if(wired(nid, pkt, vent, temp)){
+						modifyCap(vent, -pkt.getDataRate(), false);
+							
+						// Install wired rule
+						for(int i = 0; i < vent.size(); i++){
+
+							// Switch side event
+							ret.setEventType(EVENT_INSTALL);
+							ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
+							ret.setID(vent[i].getSID());
+							ret.setPacket(pkt);
+							ret.setEntry(vent[i]);
+							eventQueue.push(ret);
+						}
+						// Record inserted entries
+						allEntry.push_back(vent);
+						continue;
 					}
 				}
 				
