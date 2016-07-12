@@ -115,7 +115,7 @@ void Fattree::controller(Event ctrEvt){
 		vent.clear();
 
 		// LARGE FLOW!!!!!!
-		if(pkt.getDataRate() >= 0.125 || longLivedFlow >= 11.0){
+		if(pkt.getDataRate() >= 0.125 || longLivedFlow >= 8.0){
 
 			// You MUST use wired :)
 			temp = ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay;
