@@ -3,7 +3,7 @@
 #define PARAMETER_H
 
 /******** K *******/
-#define SIZE_OF_K 20
+#define SIZE_OF_K 4
 
 /******** Delays ********/
 #define TCAM_SEARCH_DELAY 28.5
@@ -16,7 +16,7 @@
 #define WIRELESS_RANGE 10.0
 
 /******** TCAM ********/
-#define MAX_TCAM_ENTRY 1500
+#define MAX_TCAM_ENTRY 2
 #define ENTRY_EXPIRE_TIME 1e8
 
 /***** Threshold *****/

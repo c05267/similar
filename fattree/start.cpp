@@ -32,6 +32,10 @@ void Fattree::start(void){
 	int hostID;
 	IP srcIP;
 	vector<Entry>vent;
+	// Variables
+	double TCAMDelay = TCAM_SEARCH_DELAY;
+	double forwardDelay;
+	Entry ent;
 	//int total = 0;
 
 	// Event queue
@@ -167,10 +171,42 @@ void Fattree::start(void){
 				metric_flowSetupRequest ++;
 				break;
 
-			// Interval timeout: handle batch of flow setup requests
-			/*case EVENT_INTERVAL:
-				controller(evt);
-				break;*/
+			case EVENT_DIRECT:
+				pkt = evt.getPacket();
+				sid = evt.getID();
+				sw[sid]->isSetup[evt.getPacket()] = false;
+				ts = evt.getTimeStamp();
+				ent = evt.getEntry();
+				ts = ts + TCAMDelay;
+				for(int i = 0; i < sw[sid]->que.size(); i++){
+
+					// Only check last entry of TCAM
+					if(ent.isMatch(sw[sid]->que[i])){
+
+						// Forward event
+						if(PKT_SIZE > pkt.getFlowSize())
+							forwardDelay = pkt.getFlowSize() / pkt.getDataRate();
+						else
+							forwardDelay = PKT_SIZE / pkt.getDataRate();
+						next.setTimeStamp(ts + forwardDelay);
+						next.setEventType(EVENT_FORWARD);
+						next.setPacket(pkt);
+						
+						// Wired/Wireless
+						if(ent.isWireless())
+							next.setID(sw[sid]->wlink[ent.getOutputPort()].id);
+						else
+							next.setID(sw[sid]->link[ent.getOutputPort()].id);
+
+						eventQueue.push(next);
+
+						// Remove from queue
+						sw[sid]->que.erase(sw[sid]->que.begin()+i);
+						i--;
+					}
+				}
+				
+				break;
 
 			// Install & forward
 			case EVENT_INSTALL:

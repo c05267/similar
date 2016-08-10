@@ -59,7 +59,10 @@ void Fattree::controller(Event ctrEvt){
 				if(rule(nid, allEntry[nowFlowID], ent)){
 					ent.setExpire(ctrEvt.getTimeStamp() + flowSetupDelay + ENTRY_EXPIRE_TIME);
 					// Install the new entry
-					ret.setEventType(EVENT_INSTALL);
+					if(pkt.getDataRate() <= 0.000125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY)
+						ret.setEventType(EVENT_INSTALL);
+					else
+						ret.setEventType(EVENT_DIRECT);
 					ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay);
 					ret.setID(nid);
 					ret.setPacket(pkt);
