@@ -178,6 +178,20 @@ void Fattree::start(void){
 				ts = evt.getTimeStamp();
 				ent = evt.getEntry();
 				ts = ts + TCAMDelay;
+				
+				if(sid < numberOfCore + numberOfAggregate + numberOfEdge && pkt.getFirstPacket()){
+					nowFlowID = rcdFlowID[evt.getPacket()];
+					if(sid == allEntry[nowFlowID][0].getSID()){
+
+						// Up to aggr or core only
+						if(evt.getPacket().getSrcIP().byte[1] != evt.getPacket().getDstIP().byte[1]
+								|| evt.getPacket().getSrcIP().byte[2] != evt.getPacket().getDstIP().byte[2]){
+							if(allEntry[nowFlowID][0].isWireless())	numberOfWirelessFlow ++;
+							else numberOfWiredFlow ++;
+						}
+					}
+				}
+				
 				for(int i = 0; i < sw[sid]->que.size(); i++){
 
 					// Only check last entry of TCAM
