@@ -31,6 +31,7 @@ void Fattree::controller(Event ctrEvt){
 	bool hasHandle = false;
 	int k;
 	int wired_replacement, wireless_replacement;
+	double longLivedFlow;
 
 	// Classify events
 	for(int i = 0; i < cumQue.size(); i++){
@@ -113,7 +114,11 @@ void Fattree::controller(Event ctrEvt){
 
 		// Clear entry
 		vent.clear();
-
+		
+		//Flow duration
+		longLivedFlow = pkt.getFlowSize()/(pkt.getDataRate()*1000000);
+		//printf("Long Flow: %f\n", longLivedFlow);
+		
 		// LARGE FLOW!!!!!!
 		if(pkt.getDataRate() >= 0.125){
 
@@ -126,13 +131,13 @@ void Fattree::controller(Event ctrEvt){
 				
 				// Install rule
 				for(int i = 0; i < vent.size(); i++){
-	
-					// Install the new entry
+
+					// Switch side event
 					if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
 						ret.setEventType(EVENT_DIRECT);
+					
 					else
 						ret.setEventType(EVENT_INSTALL);
-						
 					ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
 					ret.setID(vent[i].getSID());
 					ret.setPacket(pkt);
@@ -168,7 +173,7 @@ void Fattree::controller(Event ctrEvt){
 				copyVENT = vent;
 
 				// Wireless TCAM
-				if(isTCAMfull(vent, false)){
+				if(isTCAMfull(vent, false) && wirelessHop(pkt) >=2){
 
 					// Wired CAP
 					if(wired(nid, pkt, vent, temp)){
@@ -176,16 +181,14 @@ void Fattree::controller(Event ctrEvt){
 						//calculate wireless rule replacements
 						for(int i = 0; i < copyVENT.size(); i++)
 						{
-							if(sw[copyVENT[i].getSID()]->TCAMactive.size() >= MAX_TCAM_ENTRY)
-								wireless_replacement++;
+							wireless_replacement += sw[copyVENT[i].getSID()]->Get_Rule_Replacement();
 							//printf("Wireless Switch: %d \n", sw[copyVENT[i].getSID()]->Get_Rule_Replacement());
 						}
 						
 						//calculate wired rule replacements
 						for(int i = 0; i < vent.size(); i++)
 						{
-							if(sw[vent[i].getSID()]->TCAMactive.size() >= MAX_TCAM_ENTRY)
-								wired_replacement++;
+							wired_replacement += sw[vent[i].getSID()]->Get_Rule_Replacement();
 							//printf("Wired Switch: %d \n", sw[vent[i].getSID()]->Get_Rule_Replacement());
 						}
 						
@@ -200,9 +203,10 @@ void Fattree::controller(Event ctrEvt){
 							// Install wired rule
 							for(int i = 0; i < vent.size(); i++){
 
-							// Install the new entry
+								// Switch side event
 							if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
 								ret.setEventType(EVENT_DIRECT);
+							
 							else
 								ret.setEventType(EVENT_INSTALL);
 								ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
@@ -224,11 +228,12 @@ void Fattree::controller(Event ctrEvt){
 							// Install wired rule
 							for(int i = 0; i < vent.size(); i++){
 
-							// Install the new entry
-							if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
-								ret.setEventType(EVENT_DIRECT);
-							else
-								ret.setEventType(EVENT_INSTALL);
+								// Switch side event
+								if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
+									ret.setEventType(EVENT_DIRECT);
+								
+								else
+									ret.setEventType(EVENT_INSTALL);
 								ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
 								ret.setID(vent[i].getSID());
 								ret.setPacket(pkt);
@@ -239,6 +244,31 @@ void Fattree::controller(Event ctrEvt){
 							allEntry.push_back(vent);
 							continue;
 						}
+					}
+				}
+				else if(longLivedFlow >= 8.0 && wirelessHop(pkt) >=2)
+				{
+					if(wired(nid, pkt, vent, temp)){
+						modifyCap(vent, -pkt.getDataRate(), false);
+							
+						// Install wired rule
+						for(int i = 0; i < vent.size(); i++){
+
+							// Switch side event
+							if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
+								ret.setEventType(EVENT_DIRECT);
+							
+							else
+								ret.setEventType(EVENT_INSTALL);
+							ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
+							ret.setID(vent[i].getSID());
+							ret.setPacket(pkt);
+							ret.setEntry(vent[i]);
+							eventQueue.push(ret);
+						}
+						// Record inserted entries
+						allEntry.push_back(vent);
+						continue;
 					}
 				}
 				
@@ -258,6 +288,7 @@ void Fattree::controller(Event ctrEvt){
 				}
 				// Record inserted entries
 				allEntry.push_back(copyVENT);
+
 			}
 
 			// Wired CAP
@@ -272,6 +303,7 @@ void Fattree::controller(Event ctrEvt){
 					// Switch side event
 					if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
 						ret.setEventType(EVENT_DIRECT);
+					
 					else
 						ret.setEventType(EVENT_INSTALL);
 					ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
@@ -312,13 +344,14 @@ void Fattree::controller(Event ctrEvt){
 
 						// Wireless TCAM
 						if(!isTCAMfull(vent, false)){
-						
+							
 							// Reserve capacity
 							modifyCap(vent, -pkt.getDataRate(), true);
 
 							// Install wireless rule
 							for(int i = 0; i < vent.size(); i++){
 
+								// Switch side event
 								ret.setEventType(EVENT_INSTALL);
 								ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
 								ret.setID(vent[i].getSID());
@@ -342,6 +375,7 @@ void Fattree::controller(Event ctrEvt){
 					// Switch side event
 					if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
 						ret.setEventType(EVENT_DIRECT);
+					
 					else
 						ret.setEventType(EVENT_INSTALL);
 					ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
@@ -356,7 +390,7 @@ void Fattree::controller(Event ctrEvt){
 			
 			// Wireless CAP
 			else if(wireless(nid, pkt, vent, temp)){
-			
+				
 				// Reserve capacity
 				modifyCap(vent, -pkt.getDataRate(), true);
 
