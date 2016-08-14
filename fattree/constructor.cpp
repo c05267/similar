@@ -47,10 +47,6 @@ Fattree::Fattree(int k){
 	node = new Node*[totalNode];
 	sw = new Switch*[totalNode - numberOfHost];
 	totFlow = 0; 
-	Wireless_D = 0;
-	Wireless_C = 0;
-	Wireless_E = 0;
-	Wireless_G = 0;
 	// All path flow entry reset
 	flowIDCount = 1;
 	vector<Entry>vent;

@@ -33,7 +33,6 @@ void Fattree::controller(Event ctrEvt){
 	int wired_replacement, wireless_replacement;
 	double longLivedFlow;
 
-
 	// Classify events
 	for(int i = 0; i < cumQue.size(); i++){
 		evt = cumQue[i];
@@ -108,13 +107,14 @@ void Fattree::controller(Event ctrEvt){
 		// Assign flow ID
 		nowFlowID = flowIDCount ++;
 		rcdFlowID[pkt] = nowFlowID;
-		
-		//Flow duration
-		longLivedFlow = pkt.getFlowSize()/(pkt.getDataRate()*1000000);
 
 		// Clear entry
 		vent.clear();
-
+		
+		//Flow duration
+		longLivedFlow = pkt.getFlowSize()/(pkt.getDataRate()*1000000);
+		//printf("Long Flow: %f\n", longLivedFlow);
+		
 		// LARGE FLOW!!!!!!
 		if(pkt.getDataRate() >= 0.125){
 
@@ -163,28 +163,9 @@ void Fattree::controller(Event ctrEvt){
 
 				// Copy for later use
 				copyVENT = vent;
-				if(longLivedFlow >= 8.0 && wirelessHop(pkt) >=2)
-				{
-					if(wired(nid, pkt, vent, temp)){
-						modifyCap(vent, -pkt.getDataRate(), false);
-							
-						// Install wired rule
-						for(int i = 0; i < vent.size(); i++){
 
-							// Switch side event
-							ret.setEventType(EVENT_INSTALL);
-							ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
-							ret.setID(vent[i].getSID());
-							ret.setPacket(pkt);
-							ret.setEntry(vent[i]);
-							eventQueue.push(ret);
-						}
-						// Record inserted entries
-						allEntry.push_back(vent);
-						continue;
-					}
-				}	// Wireless TCAM
-				else if(isTCAMfull(vent, false) && wirelessHop(pkt) >=2 ){
+				// Wireless TCAM
+				if(isTCAMfull(vent, false) && wirelessHop(pkt) >=2){
 
 					// Wired CAP
 					if(wired(nid, pkt, vent, temp)){
@@ -247,11 +228,29 @@ void Fattree::controller(Event ctrEvt){
 							allEntry.push_back(vent);
 							continue;
 						}
-						else if(longLivedFlow >= 8.0)
-							Wireless_D++;
 					}
 				}
+				else if(longLivedFlow >= 8.0 && wirelessHop(pkt) >=2)
+				{
+					if(wired(nid, pkt, vent, temp)){
+						modifyCap(vent, -pkt.getDataRate(), false);
+							
+						// Install wired rule
+						for(int i = 0; i < vent.size(); i++){
 
+							// Switch side event
+							ret.setEventType(EVENT_INSTALL);
+							ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
+							ret.setID(vent[i].getSID());
+							ret.setPacket(pkt);
+							ret.setEntry(vent[i]);
+							eventQueue.push(ret);
+						}
+						// Record inserted entries
+						allEntry.push_back(vent);
+						continue;
+					}
+				}
 				
 				// Reserve capacity
 				modifyCap(copyVENT, -pkt.getDataRate(), true);
@@ -269,8 +268,7 @@ void Fattree::controller(Event ctrEvt){
 				}
 				// Record inserted entries
 				allEntry.push_back(copyVENT);
-				if(longLivedFlow >= 8.0)
-					Wireless_G++;
+
 			}
 
 			// Wired CAP
@@ -322,7 +320,7 @@ void Fattree::controller(Event ctrEvt){
 
 						// Wireless TCAM
 						if(!isTCAMfull(vent, false)){
-						
+							
 							// Reserve capacity
 							modifyCap(vent, -pkt.getDataRate(), true);
 
@@ -339,8 +337,6 @@ void Fattree::controller(Event ctrEvt){
 							}
 							// Record inserted entries
 							allEntry.push_back(vent);
-							if(longLivedFlow >= 8.0)
-								Wireless_C++;
 							continue;
 						}
 					}
@@ -366,7 +362,7 @@ void Fattree::controller(Event ctrEvt){
 			
 			// Wireless CAP
 			else if(wireless(nid, pkt, vent, temp)){
-			
+				
 				// Reserve capacity
 				modifyCap(vent, -pkt.getDataRate(), true);
 
@@ -383,8 +379,6 @@ void Fattree::controller(Event ctrEvt){
 				}
 				// Record inserted entries
 				allEntry.push_back(vent);
-				if(longLivedFlow >= 8.0)
-					Wireless_E++;
 			}
 
 			// No such path exists
