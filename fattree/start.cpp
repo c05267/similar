@@ -32,6 +32,9 @@ void Fattree::start(void){
 	int hostID;
 	IP srcIP;
 	vector<Entry>vent;
+	double TCAMDelay = TCAM_SEARCH_DELAY;
+	double forwardDelay;
+	Entry ent;
 
 	// Event queue
 	while(!eventQueue.empty()){
@@ -158,6 +161,57 @@ void Fattree::start(void){
 
 				// Push into event queue
 				eventQueue.push(next);
+				break;
+				
+			case EVENT_DIRECT:
+				pkt = evt.getPacket();
+				sid = evt.getID();
+				sw[sid]->isSetup[evt.getPacket()] = false;
+				ts = evt.getTimeStamp();
+				ent = evt.getEntry();
+				ts = ts + TCAMDelay;
+				
+				if(sid < numberOfCore + numberOfAggregate + numberOfEdge && pkt.getFirstPacket()){
+					nowFlowID = rcdFlowID[evt.getPacket()];
+					if(sid == allEntry[nowFlowID][0].getSID()){
+
+						// Up to aggr or core only
+						if(evt.getPacket().getSrcIP().byte[1] != evt.getPacket().getDstIP().byte[1]
+								|| evt.getPacket().getSrcIP().byte[2] != evt.getPacket().getDstIP().byte[2]){
+							if(allEntry[nowFlowID][0].isWireless())	numberOfWirelessFlow ++;
+							else numberOfWiredFlow ++;
+						}
+					}
+				}
+				
+				for(int i = 0; i < sw[sid]->que.size(); i++){
+
+					// Only check last entry of TCAM
+					if(ent.isMatch(sw[sid]->que[i])){
+
+						// Forward event
+						if(PKT_SIZE > pkt.getFlowSize())
+							forwardDelay = pkt.getFlowSize() / pkt.getDataRate();
+						else
+							forwardDelay = PKT_SIZE / pkt.getDataRate();
+						next.setTimeStamp(ts + forwardDelay);
+						next.setEventType(EVENT_FORWARD);
+						next.setPacket(pkt);
+						
+						// Wired/Wireless
+						if(ent.isWireless())
+							next.setID(sw[sid]->wlink[ent.getOutputPort()].id);
+						else
+							next.setID(sw[sid]->link[ent.getOutputPort()].id);
+
+						eventQueue.push(next);
+
+						// Remove from queue
+						sw[sid]->que.erase(sw[sid]->que.begin()+i);
+						i--;
+					}
+				}
+				
 				break;
 
 			// Cumulate until interval timeout
