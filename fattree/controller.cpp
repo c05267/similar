@@ -60,9 +60,8 @@ void Fattree::controller(Event ctrEvt){
 				if(rule(nid, allEntry[nowFlowID], ent)){
 					ent.setExpire(ctrEvt.getTimeStamp() + flowSetupDelay + ENTRY_EXPIRE_TIME);
 					// Install the new entry
-					if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
+					if(rand()%2 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY)
 						ret.setEventType(EVENT_DIRECT);
-					
 					else
 						ret.setEventType(EVENT_INSTALL);
 					ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay);
@@ -133,9 +132,8 @@ void Fattree::controller(Event ctrEvt){
 				for(int i = 0; i < vent.size(); i++){
 
 					// Switch side event
-					if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
+					if(rand()%2 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY)
 						ret.setEventType(EVENT_DIRECT);
-					
 					else
 						ret.setEventType(EVENT_INSTALL);
 					ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
@@ -204,9 +202,8 @@ void Fattree::controller(Event ctrEvt){
 							for(int i = 0; i < vent.size(); i++){
 
 								// Switch side event
-							if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
+							if(rand()%2 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY)
 								ret.setEventType(EVENT_DIRECT);
-							
 							else
 								ret.setEventType(EVENT_INSTALL);
 								ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
@@ -229,9 +226,8 @@ void Fattree::controller(Event ctrEvt){
 							for(int i = 0; i < vent.size(); i++){
 
 								// Switch side event
-								if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
+								if(rand()%2 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY)
 									ret.setEventType(EVENT_DIRECT);
-								
 								else
 									ret.setEventType(EVENT_INSTALL);
 								ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
@@ -255,11 +251,10 @@ void Fattree::controller(Event ctrEvt){
 						for(int i = 0; i < vent.size(); i++){
 
 							// Switch side event
-							if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
-								ret.setEventType(EVENT_DIRECT);
-							
-							else
-								ret.setEventType(EVENT_INSTALL);
+						if(rand()%2 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY)
+							ret.setEventType(EVENT_DIRECT);
+						else
+							ret.setEventType(EVENT_INSTALL);
 							ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
 							ret.setID(vent[i].getSID());
 							ret.setPacket(pkt);
@@ -301,9 +296,8 @@ void Fattree::controller(Event ctrEvt){
 				for(int i = 0; i < vent.size(); i++){
 
 					// Switch side event
-					if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
+					if(rand()%2 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY)
 						ret.setEventType(EVENT_DIRECT);
-					
 					else
 						ret.setEventType(EVENT_INSTALL);
 					ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
@@ -373,9 +367,8 @@ void Fattree::controller(Event ctrEvt){
 				for(int i = 0; i < copyVENT.size(); i++){
 
 					// Switch side event
-					if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
+					if(rand()%2 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY)
 						ret.setEventType(EVENT_DIRECT);
-					
 					else
 						ret.setEventType(EVENT_INSTALL);
 					ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay);
