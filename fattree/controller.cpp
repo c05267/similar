@@ -10,6 +10,7 @@
 #include "../event/event.h"
 #include "../event/eventType.h"
 #include "../mysort/mysort.h"
+#include "time.h"   
 
 // Controller
 void Fattree::controller(Event ctrEvt){
@@ -30,6 +31,8 @@ void Fattree::controller(Event ctrEvt){
 	vector<Entry>copyVENT;
 	bool hasHandle = false;
 	int k;
+	clock_t start, finish; 
+	double duration;  
 
 
 	// Classify events
@@ -92,9 +95,9 @@ void Fattree::controller(Event ctrEvt){
 	cumQue.clear();
 
 	// Sort with the largest gap between wired & wireless
+	//start = clock();
 	mySort msrt(this);
 	sort(flowSetupEvent.begin(), flowSetupEvent.end(), msrt);
-
 	// Currently, all flow setup apply wired policy
 	for(int j = 0; j < flowSetupEvent.size(); j++){
 		evt = flowSetupEvent[j];
@@ -167,6 +170,10 @@ void Fattree::controller(Event ctrEvt){
 		// Clear Entry
 		vent.clear();
 	}
+	
+	//finish = clock();
+	//duration = (double)(finish - start) / CLOCKS_PER_SEC;
+	//printf("seconds: %f \n", duration);
 
 	// DEBUG: if no event handled, stop
 	if(!eventQueue.size()) return;
