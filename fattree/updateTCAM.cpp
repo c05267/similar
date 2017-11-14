@@ -13,7 +13,7 @@ void Fattree::updateTCAM(int nid, double timeStamp){
 			tmpPkt = sw[nid]->TCAMactive.front().getSample();
 			sw[nid]->TCAMmapA.erase(tmpPkt);
 			sw[nid]->TCAMactive.pop_front();
-			printf("KKKKKKK \n");
+			//printf("KKKKKKK \n");
 		}
 		else break;
 	}
