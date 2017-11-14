@@ -9,6 +9,7 @@
 #include "../fattree/fattree.h"
 #include "../event/event.h"
 #include "../event/eventType.h"
+#include "time.h"   
 
 
 // Controller
@@ -28,6 +29,8 @@ void Fattree::controller(Event ctrEvt){
 	vector<Event>flowSetupEvent;
 	vector<Entry>vent;
 	bool hasHandle = false;
+	clock_t start, finish; 
+	double duration;  
 
 	// Classify events
 	for(int i = 0; i < cumQue.size(); i++){
@@ -86,6 +89,7 @@ void Fattree::controller(Event ctrEvt){
 	if(((int)cumQue.size()) > 0) hasHandle = true;
 	cumQue.clear();
 
+	//start = clock();   
 	// Currently, all flow setup apply wired policy
 	for(int j = 0; j < flowSetupEvent.size(); j++){
 		evt = flowSetupEvent[j];
@@ -119,6 +123,7 @@ void Fattree::controller(Event ctrEvt){
 			allEntry.push_back(vent);
 		}
 
+
 		// No such path exists
 		else{
 			fprintf(stderr, "Error: %s to %s: ", pkt.getSrcIP().fullIP.c_str(), pkt.getDstIP().fullIP.c_str());
@@ -129,6 +134,10 @@ void Fattree::controller(Event ctrEvt){
 		// Clear Entry
 		vent.clear();
 	}
+	
+	//finish = clock();
+	//duration = (double)(finish - start) / CLOCKS_PER_SEC;
+	//printf("seconds: %f \n", duration);
 
 	// DEBUG: if no event handled, stop
 	if(!eventQueue.size()) return;
