@@ -17,7 +17,7 @@
 
 /******** TCAM ********/
 #define MAX_TCAM_ENTRY 1500
-#define ENTRY_EXPIRE_TIME 1e8
+#define ENTRY_EXPIRE_TIME 1e7
 
 /***** Threshold *****/
 #define THR_WIRED 0.0
