@@ -47,7 +47,7 @@ Event Switch::forward(double timeStamp, Packet pkt){
 	while(!TCAMactive.empty()){
 		if(TCAMactive.front().isExpired(timeStamp)){
 			tmpPkt = TCAMactive.front().getSample();
-			printf("Source Port: %d \n", tmpPkt.getSrcPort());
+			//printf("Source Port: %d \n", tmpPkt.getSrcPort());
 			TCAMmapA.erase(tmpPkt);
 			TCAMactive.pop_front();
 		}
