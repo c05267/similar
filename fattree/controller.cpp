@@ -10,6 +10,9 @@
 #include "../event/event.h"
 #include "../event/eventType.h"
 #include "../mysort/mysort.h"
+#include "time.h"   
+#include "unistd.h"
+
 
 // Controller
 void Fattree::controller(Event ctrEvt){
@@ -32,6 +35,9 @@ void Fattree::controller(Event ctrEvt){
 	int k;
 	int wired_replacement, wireless_replacement;
 	double longLivedFlow;
+	clock_t start, finish; 
+	double duration; 
+	//long gggg = 10000000L;
 
 	// Classify events
 	for(int i = 0; i < cumQue.size(); i++){
@@ -95,6 +101,7 @@ void Fattree::controller(Event ctrEvt){
 	cumQue.clear();
 
 	// Sort with the largest gap between wired & wireless
+	//start = clock();
 	mySort msrt(this);
 	sort(flowSetupEvent.begin(), flowSetupEvent.end(), msrt);
 
@@ -417,6 +424,10 @@ void Fattree::controller(Event ctrEvt){
 			}
 		}
 	}
+	//sleep(2);
+	//finish = clock();
+	//duration = (double)(finish - start) / CLOCKS_PER_SEC;
+	//printf("seconds: %f \n", duration);
 
 	// DEBUG: if no event handled, stop
 	if(!eventQueue.size()) return;
