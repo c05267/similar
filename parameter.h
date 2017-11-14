@@ -18,7 +18,7 @@
 /******** TCAM ********/
 #define MIN_TCAM_ENTRY 500
 #define MAX_TCAM_ENTRY 1500
-#define ENTRY_EXPIRE_TIME 1e8
+#define ENTRY_EXPIRE_TIME 1e7
 #define Long_lived_THR 0.5
 #define PKT_SIZE 1400
 #endif
