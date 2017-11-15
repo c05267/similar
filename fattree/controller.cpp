@@ -25,6 +25,7 @@ void Fattree::controller(Event ctrEvt){
 	double delay;
 	double flowSetupDelay = FLOW_SETUP_DELAY;
 	double computePathDelay = CONTROL_PATH_DELAY;
+	double flowTableDelay = FLOW_TABLE_DELAY;
 	Event evt, ret;
 	Packet pkt;
 	Entry ent;
@@ -64,14 +65,14 @@ void Fattree::controller(Event ctrEvt){
 
 				// Extract original entry
 				if(rule(nid, allEntry[nowFlowID], ent)){
-					ent.setExpire(ctrEvt.getTimeStamp() + flowSetupDelay + ENTRY_EXPIRE_TIME);
+					ent.setExpire(ctrEvt.getTimeStamp() + flowSetupDelay + flowTableDelay + ENTRY_EXPIRE_TIME);
 					// Install the new entry
 					if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
 						ret.setEventType(EVENT_DIRECT);
 					
 					else
 						ret.setEventType(EVENT_INSTALL);
-					ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay);
+					ret.setTimeStamp(ctrEvt.getTimeStamp() + flowTableDelay + flowSetupDelay);
 					ret.setID(nid);
 					ret.setPacket(pkt);
 					ret.setEntry(ent);

@@ -9,7 +9,8 @@
 #define TCAM_SEARCH_DELAY 28.5
 #define FLOW_SETUP_DELAY 1
 #define CONTROL_BATCH 500
-#define CONTROL_PATH_DELAY 0
+#define CONTROL_PATH_DELAY 5000
+#define FLOW_TABLE_DELAY 1000
 
 /******** Link ********/
 #define LINK_CAPACITY 125.0
@@ -23,6 +24,6 @@
 #define THR_WIRED 0.0
 #define THR_WIRELESS 0.0
 #define THR_TCAM_FULL 1.0
-#define Long_lived_THR 0.01
+#define Long_lived_THR 0.5
 #define PKT_SIZE 1400
 #endif
