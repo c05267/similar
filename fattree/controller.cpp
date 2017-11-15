@@ -23,6 +23,7 @@ void Fattree::controller(Event ctrEvt){
 	double delay;
 	double flowSetupDelay = FLOW_SETUP_DELAY;
 	double computePathDelay = CONTROL_PATH_DELAY;
+	double flowTableDelay = FLOW_TABLE_DELAY;
 	Event evt, ret;
 	Packet pkt;
 	Entry ent;
@@ -57,11 +58,11 @@ void Fattree::controller(Event ctrEvt){
 				//printf("packet seq: %d\n", pkt.getSequence());
 				// Rule needed
 				if(rule(nid, allEntry[nowFlowID], ent)){
-					ent.setExpire(ctrEvt.getTimeStamp() + flowSetupDelay + ENTRY_EXPIRE_TIME);
+					ent.setExpire(ctrEvt.getTimeStamp() + flowSetupDelay + flowTableDelay + ENTRY_EXPIRE_TIME);
 
 					// Switch side install rule
 					ret.setEventType(EVENT_INSTALL);
-					ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay);
+					ret.setTimeStamp(ctrEvt.getTimeStamp() + flowSetupDelay + flowTableDelay);
 					ret.setID(nid);
 					ret.setPacket(pkt);
 					ret.setEntry(ent);

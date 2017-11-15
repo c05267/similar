@@ -209,7 +209,7 @@ void Fattree::start(void){
 					if(perCent != prevPerCent){
 						printf("%3d%% (%d/%d) done.\n", perCent, arrive, totFlow);
 						prevPerCent = perCent;
-						
+					
 						
 					}
 					
@@ -236,6 +236,7 @@ void Fattree::start(void){
 					// Flow arrival time
 					metric_avgFlowCompleteTime += (evt.getTimeStamp() - metric_flowArrivalTime[evt.getPacket().getSequence()]);
 					metric_flowArrivalTime.erase(evt.getPacket().getSequence());
+					//printf("flow completion time: %.3lf\n", metric_avgFlowCompleteTime);
 
 					// Output metric
 					if(perCent == 100){
