@@ -120,11 +120,11 @@ Event Switch::forward(double timeStamp, Packet pkt){
 	timeStamp = timeStamp + TCAMDelay;
 
 	// Forward event
-	/*if(PKT_SIZE > pkt.getFlowSize())
+	if(PKT_SIZE > pkt.getFlowSize())
 		forwardDelay = pkt.getFlowSize() / pkt.getDataRate();
 	else
-		forwardDelay = PKT_SIZE / pkt.getDataRate();*/
-	evt.setTimeStamp(timeStamp + 1);
+		forwardDelay = PKT_SIZE / pkt.getDataRate();
+	evt.setTimeStamp(timeStamp + forwardDelay);
 	evt.setEventType(EVENT_FORWARD);
 	evt.setPacket(pkt);
 
