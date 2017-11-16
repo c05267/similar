@@ -47,7 +47,7 @@ Event Switch::forward(double timeStamp, Packet pkt){
 	while(!TCAMactive.empty()){
 		if(TCAMactive.front().isExpired(timeStamp)){
 			tmpPkt = TCAMactive.front().getSample();
-			printf("Source Port: %d \n", tmpPkt.getSrcPort());
+//			printf("Source Port: %d \n", tmpPkt.getSrcPort());
 			TCAMmapA.erase(tmpPkt);
 			TCAMactive.pop_front();
 		}
@@ -131,11 +131,11 @@ Event Switch::forward(double timeStamp, Packet pkt){
 		forwardDelay = lastPktSize / pkt.getDataRate();
 	}
 	else */
-	/*if(PKT_SIZE > pkt.getFlowSize())
+	if(PKT_SIZE > pkt.getFlowSize())
 		forwardDelay = pkt.getFlowSize() / pkt.getDataRate();
 	else
-		forwardDelay = PKT_SIZE / pkt.getDataRate();*/
-	evt.setTimeStamp(timeStamp + 1);
+		forwardDelay = PKT_SIZE / pkt.getDataRate();
+	evt.setTimeStamp(timeStamp + forwardDelay);
 	evt.setEventType(EVENT_FORWARD);
 	evt.setPacket(pkt);
 
