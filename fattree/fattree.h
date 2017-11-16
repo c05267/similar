@@ -6,6 +6,7 @@
 #include "../switch/switch.h"
 #include "../packet/packet.h"
 #include "../prevhop.h"
+#include "time.h"   
 
 // Fat Tree class
 #ifndef FATTREE_H
@@ -73,9 +74,12 @@ class Fattree{
 		int metric_flowSetupRequest;
 		int metric_ruleInstallCount;
 		double metric_avgFlowCompleteTime;
+		double metric_avgRTT;
 		map<int,double>metric_flowArrivalTime;
+		map<int,double>metric_flowRTTArrivalTime;
 		int ruleReplacementCore;
 		int ruleReplacementAggr;
 		int ruleReplacementEdge;
+		//clock_t start1, finish; 
 };
 #endif

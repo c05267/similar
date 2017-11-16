@@ -11,6 +11,7 @@
 #include "../event/event.h"
 #include "../event/eventType.h"
 
+
 // Start simulation
 void Fattree::start(void){
 
@@ -194,6 +195,13 @@ void Fattree::start(void){
 //printf("[%6.1lf] %d flows arrives\n", evt.getTimeStamp(), arrive);
 				pkt = evt.getPacket();
 				
+				/*if(pkt.getFirstPacket())
+				{
+					finish = clock();
+					metric_avgRTT += ( (double) finish / CLOCKS_PER_SEC - metric_flowRTTArrivalTime[evt.getPacket().getSequence()]);
+					printf("RTT time: %.3lf\n", metric_avgRTT);
+				}*/
+				
 				if(pkt.getLastPacket())
 				{
 					//Release capacity
@@ -243,6 +251,7 @@ void Fattree::start(void){
 						printf("# of flow setup request: %d\n", metric_flowSetupRequest);
 						printf("# of installed rules: %d\n", metric_ruleInstallCount);
 						printf("Avg. flow completion time: %.3lf\n", metric_avgFlowCompleteTime/totFlow);
+						//printf("Avg. RTT: %.3lf\n", metric_avgRTT/totFlow);
 						printf("Replacement: %d / %d / %d\n", ruleReplacementCore, ruleReplacementAggr, ruleReplacementEdge);
 						//printf("count: %d \n", count);
 	/*					printf("%d %d %.3lf %d %d %d\n", metric_flowSetupRequest, metric_ruleInstallCount, 

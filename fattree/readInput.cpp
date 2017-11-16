@@ -10,6 +10,7 @@
 #include "../fattree/fattree.h"
 #include "../event/event.h"
 #include "../event/eventType.h"
+#include "time.h" 
 
 // Read packet/flow
 void Fattree::readInput(void){
@@ -18,8 +19,6 @@ void Fattree::readInput(void){
 	int byte[4], srcPort, dstPort, protocol, seq, flowSize, numberOfPacket;
 	char charSrcIP[20], charDstIP[20];
 	double timeStamp, dataRate;
-	int firstPktSize;
-	int lastPktSize;
 	IP dstIP, srcIP;
 	Event evt;
 	Packet pkt;
@@ -76,9 +75,11 @@ void Fattree::readInput(void){
 		evt.setID(node[hostID]->link[0].id);
 		eventQueue.push(evt);
 		seq++;
-
+		
 		// Record flow arrival time
 		metric_flowArrivalTime[seq-1] = timeStamp;
+		//start1 = clock();
+		//metric_flowRTTArrivalTime[seq-1] = (double) start1 / CLOCKS_PER_SEC;
 		
 		numOfPackets[pkt] = numberOfPacket - 1;
 		//printf("Number of remaining packets: %d \n", numOfPackets[pkt]);
