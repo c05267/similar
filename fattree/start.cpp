@@ -36,6 +36,8 @@ void Fattree::start(void){
 	double TCAMDelay = TCAM_SEARCH_DELAY;
 	double forwardDelay;
 	Entry ent;
+	bool sec = true;
+	int fs = 0, ri = 0;
 	//int total = 0;
 
 	// Event queue
@@ -274,6 +276,14 @@ void Fattree::start(void){
 						printf("%3d%% (%d/%d) done.\n", perCent, arrive, totFlow);
 						prevPerCent = perCent;
 					}
+					
+					if(evt.getTimeStamp() > 5000000 & sec)
+					{
+						printf("Avg. time: %.3lf\n", evt.getTimeStamp());
+						fs = metric_flowSetupRequest;
+						ri = metric_ruleInstallCount;
+						sec = false;
+					}
 		
 					// Flow arrival time
 					metric_avgFlowCompleteTime += (evt.getTimeStamp() - metric_flowArrivalTime[evt.getPacket().getSequence()]);
@@ -284,6 +294,7 @@ void Fattree::start(void){
 						printf("# of flow setup request: %d\n", metric_flowSetupRequest);
 						printf("# of installed rules: %d\n", metric_ruleInstallCount);
 						printf("Avg. flow completion time: %.3lf\n", metric_avgFlowCompleteTime/totFlow);
+						printf("Avg. flow setup: %d rule install: %d\n", fs,ri);
 						printf("Wireless:Wired = %d:%d\n", numberOfWirelessFlow, numberOfWiredFlow);
 						printf("Replacement %d / %d / %d\n", ruleReplacementCore, ruleReplacementAggr, ruleReplacementEdge);
 						/*for(int i=0; i<numberOfCore+numberOfAggregate+numberOfEdge; i++)
