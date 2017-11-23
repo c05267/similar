@@ -33,7 +33,7 @@ void Fattree::start(void){
 	IP srcIP;
 	vector<Entry>vent;
 	bool sec = true;
-	int fs = 0, ri = 0;
+	int fs = 0, ri = 0, re = 0;
 
 	// Event queue
 	while(!eventQueue.empty()){
@@ -224,11 +224,12 @@ void Fattree::start(void){
 						prevPerCent = perCent;
 					}
 		
-					if(evt.getTimeStamp() > 5000000 & sec)
+					if(evt.getTimeStamp() > 1000000 & sec)
 					{
 						printf("Avg. time: %.3lf\n", evt.getTimeStamp());
 						fs = metric_flowSetupRequest;
 						ri = metric_ruleInstallCount;
+						re = ruleReplacementCore + ruleReplacementAggr + ruleReplacementEdge;
 						sec = false;
 					}
 					
@@ -241,7 +242,7 @@ void Fattree::start(void){
 						printf("# of flow setup request: %d\n", metric_flowSetupRequest);
 						printf("# of installed rules: %d\n", metric_ruleInstallCount);
 						printf("Avg. flow completion time: %.3lf\n", metric_avgFlowCompleteTime/totFlow);
-						printf("Avg. flow setup: %d rule install: %d\n", fs,ri);
+						printf("Avg. flow setup: %d rule install: %d rule rep: %d\n", fs,ri,re);
 						printf("Wireless:Wired = %d:%d\n", numberOfWirelessFlow, numberOfWiredFlow);
 						printf("Replacement %d / %d / %d\n", ruleReplacementCore, ruleReplacementAggr, ruleReplacementEdge);
 					}
