@@ -244,7 +244,7 @@ void Fattree::start(void){
 					/*if(arrive > 30)
 						printf("GGGGGGGGGGG\n");*/
 					
-					if(evt.getTimeStamp() > 10000000 & sec)
+					if(evt.getTimeStamp() > 5000000 & sec)
 					{
 						printf("Avg. time: %.3lf\n", evt.getTimeStamp());
 						fs = metric_flowSetupRequest;
