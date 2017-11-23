@@ -31,7 +31,7 @@ void Fattree::start(void){
 	int hostID;
 	IP srcIP;
 	bool sec = true;
-	int fs = 0, ri = 0;
+	int fs = 0, ri = 0, re = 0;
 
 	
 	//totFlow = ((int)eventQueue.size()) - 1;
@@ -244,11 +244,12 @@ void Fattree::start(void){
 					/*if(arrive > 30)
 						printf("GGGGGGGGGGG\n");*/
 					
-					if(evt.getTimeStamp() > 5000000 & sec)
+					if(evt.getTimeStamp() > 1000000 & sec)
 					{
 						printf("Avg. time: %.3lf\n", evt.getTimeStamp());
 						fs = metric_flowSetupRequest;
 						ri = metric_ruleInstallCount;
+						re = ruleReplacementCore + ruleReplacementAggr + ruleReplacementEdge; 
 						sec = false;
 					}
 					
@@ -263,7 +264,7 @@ void Fattree::start(void){
 						printf("# of flow setup request: %d\n", metric_flowSetupRequest);
 						printf("# of installed rules: %d\n", metric_ruleInstallCount);
 						printf("Avg. flow completion time: %.3lf\n", metric_avgFlowCompleteTime/totFlow);
-						printf("Avg. flow setup: %d rule install: %d\n", fs,ri);
+						printf("Avg. flow setup: %d rule install: %d rule rep: %d\n", fs,ri,re);
 						//printf("Avg. RTT: %.3lf\n", metric_avgRTT/totFlow);
 						printf("Replacement: %d / %d / %d\n", ruleReplacementCore, ruleReplacementAggr, ruleReplacementEdge);
 						//printf("count: %d \n", count);
