@@ -36,3 +36,7 @@ void Packet::setLastPacket(bool tag){
 void Packet::setIsDivided(bool di){
 	this->Divided = di;
 }
+
+void Packet::setIsMouseFlow(bool MF){
+	this->MouseFlow = MF;
+}

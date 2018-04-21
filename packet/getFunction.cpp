@@ -36,3 +36,7 @@ bool Packet::getLastPacket(void){
 bool Packet::getIsDivided(void){
 	return this->Divided;
 }
+
+bool Packet::getIsMouseFlow(void){
+	return this->MouseFlow;
+}

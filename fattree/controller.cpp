@@ -37,7 +37,9 @@ void Fattree::controller(Event ctrEvt){
 	int wired_replacement, wireless_replacement;
 	double longLivedFlow;
 	clock_t start, finish; 
-	double duration; 
+	double duration;
+	bool EF_Flag, LF_Flag = true;
+	int RID;
 	//long gggg = 10000000L;
 
 	// Classify events
@@ -67,7 +69,7 @@ void Fattree::controller(Event ctrEvt){
 				if(rule(nid, allEntry[nowFlowID], ent)){
 					ent.setExpire(ctrEvt.getTimeStamp() + flowSetupDelay + flowTableDelay + ENTRY_EXPIRE_TIME);
 					// Install the new entry
-					if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
+					if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate && pkt.getIsMouseFlow())
 						ret.setEventType(EVENT_DIRECT);
 					
 					else
@@ -127,8 +129,31 @@ void Fattree::controller(Event ctrEvt){
 		longLivedFlow = pkt.getFlowSize()/(pkt.getDataRate()*1000000);
 		//printf("Long Flow: %f\n", longLivedFlow);
 		
+		
+		
+		if(pkt.getDataRate() >= 0.125) 
+		{
+			EF_Flag= true;
+			RID = (rand() % 100);
+			if(RID >= Predition_Rate)
+			{
+				EF_Flag = false;
+			}
+		}
+		
+		if(longLivedFlow >= 8.0)
+		{
+			LF_Flag = true;
+			RID = (rand() % 100);
+			if(RID >= Predition_Rate)
+			{
+				LF_Flag = false;
+			}
+		}
+		
+		
 		// LARGE FLOW!!!!!!
-		if(pkt.getDataRate() >= 0.125){
+		if(pkt.getDataRate() >= 0.125 && EF_Flag){
 
 			// You MUST use wired :)
 			temp = ctrEvt.getTimeStamp() + flowSetupDelay + computePathDelay;
@@ -141,7 +166,7 @@ void Fattree::controller(Event ctrEvt){
 				for(int i = 0; i < vent.size(); i++){
 
 					// Switch side event
-					if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
+					if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate && pkt.getIsMouseFlow())
 						ret.setEventType(EVENT_DIRECT);
 					
 					else
@@ -212,7 +237,7 @@ void Fattree::controller(Event ctrEvt){
 							for(int i = 0; i < vent.size(); i++){
 
 								// Switch side event
-							if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
+							if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate && pkt.getIsMouseFlow())
 								ret.setEventType(EVENT_DIRECT);
 							
 							else
@@ -237,7 +262,7 @@ void Fattree::controller(Event ctrEvt){
 							for(int i = 0; i < vent.size(); i++){
 
 								// Switch side event
-								if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
+								if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate && pkt.getIsMouseFlow())
 									ret.setEventType(EVENT_DIRECT);
 								
 								else
@@ -254,7 +279,7 @@ void Fattree::controller(Event ctrEvt){
 						}
 					}
 				}
-				else if(longLivedFlow >= 8.0 && wirelessHop(pkt) >=2)
+				else if(longLivedFlow >= 8.0 && wirelessHop(pkt) >=2 && LF_Flag)
 				{
 					if(wired(nid, pkt, vent, temp)){
 						modifyCap(vent, -pkt.getDataRate(), false);
@@ -263,7 +288,7 @@ void Fattree::controller(Event ctrEvt){
 						for(int i = 0; i < vent.size(); i++){
 
 							// Switch side event
-							if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
+							if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate && pkt.getIsMouseFlow())
 								ret.setEventType(EVENT_DIRECT);
 							
 							else
@@ -309,7 +334,7 @@ void Fattree::controller(Event ctrEvt){
 				for(int i = 0; i < vent.size(); i++){
 
 					// Switch side event
-					if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
+					if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate && pkt.getIsMouseFlow())
 						ret.setEventType(EVENT_DIRECT);
 					
 					else
@@ -381,7 +406,7 @@ void Fattree::controller(Event ctrEvt){
 				for(int i = 0; i < copyVENT.size(); i++){
 
 					// Switch side event
-					if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate)
+					if(pkt.getDataRate() <= 0.00125 && sw[nid]->TCAMactive.size() >= MAX_TCAM_ENTRY && nid < numberOfCore + numberOfAggregate + numberOfEdge && nid >= numberOfCore + numberOfAggregate && pkt.getIsMouseFlow())
 						ret.setEventType(EVENT_DIRECT);
 					
 					else

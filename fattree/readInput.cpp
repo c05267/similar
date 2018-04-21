@@ -22,6 +22,7 @@ void Fattree::readInput(void){
 	Event evt;
 	Packet pkt;
 	int hostID;
+	int RID;
 
 	// Packets (5-tuples and arrival time)
 	seq = 1;
@@ -47,6 +48,18 @@ void Fattree::readInput(void){
 		pkt.setSequence(seq);
 		pkt.setFlowSize(flowSize);
 		pkt.setDataRate(dataRate);
+		if(pkt.getDataRate() <= 0.00125)
+		{
+			RID = (rand() % 100);
+			if(RID >= Predition_Rate)
+				{
+					pkt.setIsMouseFlow(false);
+				}
+			else
+				{
+					pkt.setIsMouseFlow(true);
+				}
+		}
 		
 		//add packet attribution
 		pkt.setFirstPacket(true);

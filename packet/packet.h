@@ -22,7 +22,8 @@ class Packet{
 		void setDataRate(double);
 		void setFirstPacket(bool);
 		void setLastPacket(bool);
-		void setIsDivided(bool); 
+		void setIsDivided(bool);
+		void setIsMouseFlow(bool); 
 
 		// Get function
 		IP getSrcIP(void);
@@ -36,6 +37,7 @@ class Packet{
 		bool getFirstPacket(void);
 		bool getLastPacket(void);
 		bool getIsDivided(void);
+		bool getIsMouseFlow(void); 
 
 		// Comparator function
 		bool operator<(const Packet&)const;
@@ -54,5 +56,6 @@ class Packet{
 		bool firstPacket;
 		bool lastPacket;
 		bool Divided;
+		bool MouseFlow;
 };
 #endif
