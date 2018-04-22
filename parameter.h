@@ -26,5 +26,5 @@
 #define THR_TCAM_FULL 1.0
 #define Long_lived_THR 0.01
 #define PKT_SIZE 1400
-#define Predition_Rate 100
+#define Predition_Rate 80
 #endif

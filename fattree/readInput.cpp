@@ -48,7 +48,7 @@ void Fattree::readInput(void){
 		pkt.setSequence(seq);
 		pkt.setFlowSize(flowSize);
 		pkt.setDataRate(dataRate);
-		if(pkt.getDataRate() <= 0.00125)
+		/*if(pkt.getDataRate() <= 0.00125)
 		{
 			RID = (rand() % 100);
 			if(RID >= Predition_Rate)
@@ -59,7 +59,7 @@ void Fattree::readInput(void){
 				{
 					pkt.setIsMouseFlow(true);
 				}
-		}
+		}*/
 		
 		//add packet attribution
 		pkt.setFirstPacket(true);
