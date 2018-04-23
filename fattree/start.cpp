@@ -32,6 +32,7 @@ void Fattree::start(void){
 	IP srcIP;
 	bool sec = true;
 	int fs = 0, ri = 0, re = 0;
+	double EF_FCT, NF_FCT = 0.0;
 
 	
 	//totFlow = ((int)eventQueue.size()) - 1;
@@ -253,7 +254,21 @@ void Fattree::start(void){
 						sec = false;
 					}
 					
-					
+					//elephamt flow
+					if(pkt.getDataRate() >= 0.125)
+					{
+						EF_FCT = evt.getTimeStamp() - metric_flowArrivalTime[evt.getPacket().getSequence()];
+						if(metric_EF_FlowCompleteTime < EF_FCT)
+							metric_EF_FlowCompleteTime = EF_FCT;
+					}
+					else
+					{
+						NF_FCT = evt.getTimeStamp() - metric_flowArrivalTime[evt.getPacket().getSequence()];
+						if(metric_NF_FlowCompleteTime < NF_FCT)
+							metric_NF_FlowCompleteTime = NF_FCT;
+					}
+													
+							
 					// Flow arrival time
 					metric_avgFlowCompleteTime += (evt.getTimeStamp() - metric_flowArrivalTime[evt.getPacket().getSequence()]);
 					metric_flowArrivalTime.erase(evt.getPacket().getSequence());
@@ -267,6 +282,7 @@ void Fattree::start(void){
 						printf("Avg. flow setup: %d rule install: %d rule rep: %d\n", fs,ri,re);
 						//printf("Avg. RTT: %.3lf\n", metric_avgRTT/totFlow);
 						printf("Replacement: %d / %d / %d\n", ruleReplacementCore, ruleReplacementAggr, ruleReplacementEdge);
+						printf("99 flow completion time for elephnt: %.3lf normal: %.3lf\n", metric_EF_FlowCompleteTime, metric_NF_FlowCompleteTime);
 						//printf("count: %d \n", count);
 	/*					printf("%d %d %.3lf %d %d %d\n", metric_flowSetupRequest, metric_ruleInstallCount, 
 								metric_avgFlowCompleteTime/totFlow, ruleReplacementCore, ruleReplacementAggr, ruleReplacementEdge);*/

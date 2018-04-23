@@ -80,6 +80,8 @@ class Fattree{
 		int ruleReplacementCore;
 		int ruleReplacementAggr;
 		int ruleReplacementEdge;
-		//clock_t start1, finish; 
+		//clock_t start1, finish;
+		double metric_EF_FlowCompleteTime; 
+		double metric_NF_FlowCompleteTime;
 };
 #endif
