@@ -192,7 +192,8 @@ Fattree::Fattree(int k){
 	ruleReplacementCore = 0;
 	ruleReplacementAggr = 0;
 	ruleReplacementEdge = 0;
-
+	metric_EF_FlowCompleteTime = 0.0; 
+	metric_NF_FlowCompleteTime = 0.0;
 	// DEBUG
 	/*for(int i = 0; i < numberOfCore + numberOfAggregate + numberOfEdge; i++)
 		printf("TCAM[%3d] = %3d\n", i, sw[i]->TCAMSize);*/
