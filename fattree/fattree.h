@@ -83,5 +83,8 @@ class Fattree{
 		//clock_t start1, finish;
 		double metric_EF_FlowCompleteTime; 
 		double metric_NF_FlowCompleteTime;
+		int elephant_flow_flowsetup;
+		int normal_flow_flowsetup;
+		int *flowArr;
 };
 #endif

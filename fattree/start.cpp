@@ -158,6 +158,8 @@ void Fattree::start(void){
 				cumulate(evt);
 				controller(evt);
 				metric_flowSetupRequest ++;
+				pkt = evt.getPacket();
+				flowArr[pkt.getSequence()-1]++;
 				break;
 
 			// Interval timeout: handle batch of flow setup requests
@@ -208,6 +210,17 @@ void Fattree::start(void){
 				
 				if(pkt.getLastPacket())
 				{
+					if(pkt.getDataRate() >= 0.0625)
+					{
+						if(elephant_flow_flowsetup < flowArr[pkt.getSequence()-1])
+							elephant_flow_flowsetup = flowArr[pkt.getSequence()-1];
+					}
+					else
+					{
+						if(normal_flow_flowsetup < flowArr[pkt.getSequence()-1])
+							normal_flow_flowsetup = flowArr[pkt.getSequence()-1];
+					}
+					
 					//Release capacity
 					vent = allEntry[ rcdFlowID[pkt] ];
 					modifyCap(vent, pkt.getDataRate());
@@ -283,6 +296,7 @@ void Fattree::start(void){
 						//printf("Avg. RTT: %.3lf\n", metric_avgRTT/totFlow);
 						printf("Replacement: %d / %d / %d\n", ruleReplacementCore, ruleReplacementAggr, ruleReplacementEdge);
 						printf("99 flow completion time for elephnt: %.3lf normal: %.3lf\n", metric_EF_FlowCompleteTime, metric_NF_FlowCompleteTime);
+						printf("flow setup elephnt: %d normal: %d\n", elephant_flow_flowsetup, normal_flow_flowsetup);
 						//printf("count: %d \n", count);
 	/*					printf("%d %d %.3lf %d %d %d\n", metric_flowSetupRequest, metric_ruleInstallCount, 
 								metric_avgFlowCompleteTime/totFlow, ruleReplacementCore, ruleReplacementAggr, ruleReplacementEdge);*/

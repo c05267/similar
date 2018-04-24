@@ -84,5 +84,10 @@ void Fattree::readInput(void){
 		numOfPackets[pkt] = numberOfPacket - 1;
 		//printf("Number of remaining packets: %d \n", numOfPackets[pkt]);
 	}
+	flowArr = new int [totFlow];
+	for(int i=0 ; i < totFlow; i++)
+	{
+		flowArr[i] = 0;
+	}
 	//printf("Hello\n");
 }

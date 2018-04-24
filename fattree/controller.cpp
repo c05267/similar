@@ -41,7 +41,7 @@ void Fattree::controller(Event ctrEvt){
 
 		// Flow Setup Request
 		if(evt.getEventType() == EVENT_FLOWSETUP){
-
+			
 			// Illegal destination address
 			if(!legalAddr(pkt.getDstIP())){
 				delay = 1.0;
