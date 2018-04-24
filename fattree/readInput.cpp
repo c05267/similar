@@ -74,5 +74,9 @@ void Fattree::readInput(void){
 		metric_flowArrivalTime[seq-1] = timeStamp;
 		numOfPackets[pkt] = numberOfPacket - 1;
 	}
-	
+	flowArr = new int [totFlow];
+	for(int i=0 ; i < totFlow; i++)
+	{
+		flowArr[i] = 0;
+	}
 }

@@ -169,6 +169,8 @@ void Fattree::start(void){
 				cumulate(evt);
 				controller(evt);
 				metric_flowSetupRequest ++;
+				pkt = evt.getPacket();
+				flowArr[pkt.getSequence()-1]++;
 				break;
 
 			// Interval timeout: handle batch of flow setup requests
@@ -211,6 +213,17 @@ void Fattree::start(void){
 				pkt = evt.getPacket();
 				if(pkt.getLastPacket())
 				{
+					
+					if(pkt.getDataRate() >= 0.0625)
+					{
+						if(elephant_flow_flowsetup < flowArr[pkt.getSequence()-1])
+							elephant_flow_flowsetup = flowArr[pkt.getSequence()-1];
+					}
+					else
+					{
+						if(normal_flow_flowsetup < flowArr[pkt.getSequence()-1])
+							normal_flow_flowsetup = flowArr[pkt.getSequence()-1];
+					}
 					
 					vent = allEntry[ rcdFlowID[pkt] ];
 					modifyCap(vent, pkt.getDataRate(), vent[0].isWireless());
@@ -261,6 +274,7 @@ void Fattree::start(void){
 						printf("Wireless:Wired = %d:%d\n", numberOfWirelessFlow, numberOfWiredFlow);
 						printf("Replacement %d / %d / %d\n", ruleReplacementCore, ruleReplacementAggr, ruleReplacementEdge);
 						printf("99 flow completion time for elephnt: %.3lf normal: %.3lf\n", metric_EF_FlowCompleteTime, metric_NF_FlowCompleteTime);
+						printf("flow setup elephnt: %d normal: %d\n", elephant_flow_flowsetup, normal_flow_flowsetup);
 					}
 				}
 /*
