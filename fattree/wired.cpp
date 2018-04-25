@@ -110,17 +110,36 @@ bool Fattree::wired(int nid, Packet pkt, vector<Entry>& vent, double timeStamp){
 	}
 
 	// Create entries along these switches
-	int port, ranID;
+	int port, flowlet;
 	Entry ent;
 	vector<int>revSeq;
+	double upperbound = 0.0; 
 	if(prevNode[endID].size() > 0){
 		vent.clear();
 		nowID = endID;
 		revSeq.push_back(endID);
 		while(nowID != srcID){
-			ranID = rand()%(prevNode[nowID].size());
-			nowID = prevNode[nowID][ranID];
+			upperbound = 0.0;
+			for (int i=0; i < prevNode[nowID].size(); i++)
+			{
+				for(port = 0; port < node[nowID]->link.size(); port++)
+					if(node[nowID]->link[port].id == prevNode[nowID][i]) break;
+						
+				if (sw[nowID]->link[port].cap > upperbound)
+				{
+					flowlet = prevNode[nowID][i];
+					upperbound = sw[nowID]->link[port].cap;
+					//printf("Link capacity: %.3lf and Bottleneck capacity: %.31f\n", sw[nowID]->link[port].cap, bottleneck);
+				}
+			}
+			
+			nowID = flowlet;
 			revSeq.push_back(nowID);
+			
+
+			/*ranID = rand()%(prevNode[nowID].size());
+			nowID = prevNode[nowID][ranID];
+			revSeq.push_back(nowID);*/
 		}
 		ent.setSrcMask(srcIP.byte[0], srcIP.byte[1], srcIP.byte[2], srcIP.byte[3]);
 		ent.setDstMask(dstIP.byte[0], dstIP.byte[1], dstIP.byte[2], dstIP.byte[3]);
