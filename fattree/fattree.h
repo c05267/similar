@@ -81,5 +81,8 @@ class Fattree{
 		int ruleReplacementCore;
 		int ruleReplacementAggr;
 		int ruleReplacementEdge;
+		int elephant_flow_flowsetup;
+		int normal_flow_flowsetup;
+		int *flowArr;
 };
 #endif

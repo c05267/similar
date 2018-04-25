@@ -171,6 +171,8 @@ void Fattree::start(void){
 				cumulate(evt);
 				controller(evt);
 				metric_flowSetupRequest ++;
+				pkt = evt.getPacket();
+				flowArr[pkt.getSequence()-1]++;
 				break;
 
 			case EVENT_DIRECT:
@@ -260,6 +262,17 @@ void Fattree::start(void){
 				
 				if(pkt.getLastPacket())
 				{
+					
+					if(pkt.getDataRate() >= 0.0625)
+					{
+						if(elephant_flow_flowsetup < flowArr[pkt.getSequence()-1])
+							elephant_flow_flowsetup = flowArr[pkt.getSequence()-1];
+					}
+					else if(pkt.getDataRate() > 0.00125)
+					{
+						if(normal_flow_flowsetup < flowArr[pkt.getSequence()-1])
+							normal_flow_flowsetup = flowArr[pkt.getSequence()-1];
+					}
 				
 					// Release capacity for this flow along the path
 					pkt = evt.getPacket();
@@ -298,6 +311,7 @@ void Fattree::start(void){
 						printf("Avg. flow setup: %d rule install: %d rule rep: %d\n", fs,ri,re);
 						printf("Wireless:Wired = %d:%d\n", numberOfWirelessFlow, numberOfWiredFlow);
 						printf("Replacement %d / %d / %d\n", ruleReplacementCore, ruleReplacementAggr, ruleReplacementEdge);
+						printf("flow setup elephnt: %d normal: %d\n", elephant_flow_flowsetup, normal_flow_flowsetup);
 						/*for(int i=0; i<numberOfCore+numberOfAggregate+numberOfEdge; i++)
 						{
 							total = total + sw[i]->Get_Rule_Replacement();

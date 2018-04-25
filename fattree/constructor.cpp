@@ -195,4 +195,6 @@ Fattree::Fattree(int k){
 	ruleReplacementCore = 0;
 	ruleReplacementAggr = 0;
 	ruleReplacementEdge = 0;
+	elephant_flow_flowsetup = 0;
+	normal_flow_flowsetup = 0;
 }
