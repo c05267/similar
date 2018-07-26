@@ -135,6 +135,12 @@ Fattree::Fattree(int k){
 	metric_NF_FlowCompleteTime = 0.0;
 	elephant_flow_flowsetup = 0;
 	normal_flow_flowsetup = 0;
+	metric_largeSetupRequest = 0;
+	metric_mouseSetupRequest = 0;
+	metric_normalSetupRequest = 0;
+	metric_num_largeflow = 0;
+	metric_num_mouseflow = 0;
+	metric_num_normalflow = 0;
 	
 
 	// DEBUG

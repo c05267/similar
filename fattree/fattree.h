@@ -72,6 +72,12 @@ class Fattree{
 
 		// Metric
 		int metric_flowSetupRequest;
+		int metric_largeSetupRequest;
+		int metric_mouseSetupRequest;
+		int metric_normalSetupRequest;
+		int metric_num_largeflow;
+		int metric_num_mouseflow;
+		int metric_num_normalflow;
 		int metric_ruleInstallCount;
 		double metric_avgFlowCompleteTime;
 		double metric_avgRTT;

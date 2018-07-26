@@ -160,6 +160,12 @@ void Fattree::start(void){
 				metric_flowSetupRequest ++;
 				pkt = evt.getPacket();
 				flowArr[pkt.getSequence()-1]++;
+				if(evt.getPacket().getDataRate() >= 0.125)
+					metric_largeSetupRequest++;
+				else if(evt.getPacket().getDataRate() <= 0.00125)
+					metric_mouseSetupRequest++;
+				else
+					metric_normalSetupRequest++;
 				break;
 
 			// Interval timeout: handle batch of flow setup requests
@@ -297,6 +303,9 @@ void Fattree::start(void){
 						printf("Replacement: %d / %d / %d\n", ruleReplacementCore, ruleReplacementAggr, ruleReplacementEdge);
 						printf("99 flow completion time for elephnt: %.3lf normal: %.3lf\n", metric_EF_FlowCompleteTime, metric_NF_FlowCompleteTime);
 						printf("flow setup elephnt: %d normal: %d\n", elephant_flow_flowsetup, normal_flow_flowsetup);
+						printf("Flow setup Large: %d, Mouse: %d, Normal: %d \n", metric_largeSetupRequest, metric_mouseSetupRequest, metric_normalSetupRequest);
+						printf("Number Large: %d, Mouse: %d, Normal: %d \n", metric_num_largeflow, metric_num_mouseflow, metric_num_normalflow);
+						printf("Avg Large: %f, Mouse: %f, Normal: %f \n", float(metric_largeSetupRequest/metric_num_largeflow), float(metric_mouseSetupRequest/metric_num_mouseflow), float(metric_normalSetupRequest/metric_num_normalflow));
 						//printf("count: %d \n", count);
 	/*					printf("%d %d %.3lf %d %d %d\n", metric_flowSetupRequest, metric_ruleInstallCount, 
 								metric_avgFlowCompleteTime/totFlow, ruleReplacementCore, ruleReplacementAggr, ruleReplacementEdge);*/

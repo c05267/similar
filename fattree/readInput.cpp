@@ -53,6 +53,13 @@ void Fattree::readInput(void){
 		pkt.setFlowSize(flowSize);
 		pkt.setDataRate(dataRate);
 		
+		if(dataRate >= 0.125)
+			metric_num_largeflow++;
+		else if(dataRate <= 0.00125)
+			metric_num_mouseflow++;
+		else
+			metric_num_normalflow++;
+		
 		//add packet attribution
 		pkt.setFirstPacket(true);
 		pkt.setIsDivided(false);
